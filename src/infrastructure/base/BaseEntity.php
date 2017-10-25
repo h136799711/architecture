@@ -14,7 +14,7 @@
  *********************************
  */
 
-namespace by\base;
+namespace by\infrastructure\base;
 
 
 class BaseEntity extends BaseObject

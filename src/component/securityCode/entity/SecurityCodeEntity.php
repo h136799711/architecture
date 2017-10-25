@@ -7,17 +7,19 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  * Revision History Version
  ********1.0.0********************
- * file created @ 2017-10-24 16:50
+ * file created @ 2017-10-25 13:44
  *********************************
  ********1.0.1********************
  *
  *********************************
  */
 
-namespace by\infrastructure\base;
+namespace by\component\securityCode\entity;
 
 
-class BaseObject
+use by\base\BaseEntity;
+
+class SecurityCodeEntity extends BaseEntity
 {
 
     // member function
@@ -31,6 +33,7 @@ class BaseObject
     // override function __toString()
 
     // member variables
+    private $code;
 
     // getter setter
 

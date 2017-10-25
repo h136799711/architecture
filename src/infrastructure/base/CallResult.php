@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  * Revision History Version
  ********1.0.0********************
- * file created @ 2017-10-24 16:50
+ * file created @ 2017-10-25 14:27
  *********************************
  ********1.0.1********************
  *
@@ -17,18 +17,24 @@
 namespace by\infrastructure\base;
 
 
-class BaseObject
+use by\infrastructure\helper\Object2DataArrayHelper;
+
+class CallResult extends BaseCallResult
 {
 
     // member function
 
     // construct
-    public function __construct()
+    public function __construct($data = '', $msg = '', $code = 0)
     {
-        // TODO construct
+        parent::__construct($data, $msg, $code);
     }
 
     // override function __toString()
+    public function __toString()
+    {
+        return json_encode(Object2DataArrayHelper::getDataArrayFrom($this));
+    }
 
     // member variables
 

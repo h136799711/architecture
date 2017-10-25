@@ -14,18 +14,18 @@
  *********************************
  */
 
-namespace by\base;
+namespace by\infrastructure\base;
 
 
-class BaseCallResult
+abstract class BaseCallResult
 {
 
     // member function
-
-    // construct
-    public function __construct()
+    public function __construct($data = '', $msg = '', $code = 0)
     {
-        // TODO construct
+        $this->setCode($code);
+        $this->setMsg($msg);
+        $this->setData($data);
     }
 
     // override function __toString()
@@ -36,5 +36,52 @@ class BaseCallResult
     private $data;// 返回数据
 
     // getter setter
+    /**
+     * @return mixed
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param mixed $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMsg()
+    {
+        return $this->msg;
+    }
+
+    /**
+     * @param mixed $msg
+     */
+    public function setMsg($msg)
+    {
+        $this->msg = $msg;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param mixed $data
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+    }
 
 }

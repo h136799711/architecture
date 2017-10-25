@@ -7,17 +7,17 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  * Revision History Version
  ********1.0.0********************
- * file created @ 2017-10-24 16:50
+ * file created @ 2017-10-24 16:42
  *********************************
  ********1.0.1********************
  *
  *********************************
  */
 
-namespace by\infrastructure\base;
+namespace by\component\user;
 
 
-class BaseObject
+class UserPo
 {
 
     // member function

@@ -19,33 +19,46 @@ namespace by\infrastructure\helper;
 
 class Object2DataArrayHelper
 {
-
+    // member function
+    public static function getAllProperties($instance)
+    {
+        $parent = new \ReflectionClass($instance);
+        $properties = $parent->getProperties();
+        while (($parent = $parent->getParentClass())) {
+            $properties = array_merge($parent->getProperties(), $properties);
+        }
+        return $properties;
+    }
     /**
      * 将对象实例的get函数返回的数据封装为数组,键都是小写字母加下划线形式
-     * @param $instance
+     * 支持父类的属性封装,get函数只支持 public 作用域
+     * @param object $instance 对象
      * @param array $properties 属性名称数组，属性名称必须是驼峰式
      * @return array
      */
     public static function getDataArrayFrom($instance, $properties = [])
     {
-        $className = get_class($instance);
-        $ref = new \ReflectionClass($className);
+        $ref = new \ReflectionClass($instance);
         $data = [];
         if (empty($properties)) {
-            $properties = $ref->getProperties();
-            //var_dump($properties);
+            $parent = $ref;
+            $properties = $parent->getProperties();
+            while (($parent = $parent->getParentClass())) {
+                $properties = array_merge($parent->getProperties(), $properties);
+            }
         }
         foreach ($properties as $vo) {
-
             if ($vo instanceof \ReflectionProperty) {
                 $propName = self::uncamelize($vo->getName());
-            }else{
+            } else {
                 $propName = self::uncamelize($vo);
             }
             $key = self::convertUnderline($propName);
             $methodName = 'get' . ucfirst($key);
+
             if ($ref->hasMethod($methodName)) {
-                if (!array_key_exists($key, $data)){
+                $method = $ref->getMethod($methodName);
+                if ($method->isPublic()) {
                     $data[$propName] = $instance->$methodName();
                 }
             }
@@ -59,7 +72,7 @@ class Object2DataArrayHelper
         $str = str_replace(' ', '', lcfirst($str));
         return $str;
     }
-    // member function
+
     public static function uncamelize($camelCaps, $separator = '_')
     {
         return strtolower(preg_replace('/([a-z])([A-Z])/', "$1" . $separator . "$2", $camelCaps));

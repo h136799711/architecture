@@ -14,7 +14,7 @@
  *********************************
  */
 
-namespace byTest\infrastructure\base;
+namespace byTest\infrastructure\helper;
 
 use by\infrastructure\helper\Object2DataArrayHelper;
 use PHPUnit\Framework\TestCase;
@@ -24,8 +24,9 @@ class BaseJsonObjectTest extends TestCase
 
     // member function
     /**
-     * 
+     * @covers BaseJsonObject
      * @uses   \by\infrastructure\helper\Object2DataArrayHelper
+     * @group  helper
      */
     public function testJsonObject(){
         $test = new BaseJsonObjectTest();
@@ -40,10 +41,13 @@ class BaseJsonObjectTest extends TestCase
         $this->assertArrayHasKey('to_upper', $array);
         $this->assertArrayNotHasKey('toUpper', $array);
         $array = Object2DataArrayHelper::getDataArrayFrom($test,['id','toUpper','to_upper']);
-        $this->assertArrayHasKey('toUpper', $array);
+        $this->assertArrayNotHasKey('lower', $array);
+        $this->assertArrayNotHasKey('toUpper', $array);
         $this->assertArrayHasKey('id', $array);
-        $this->assertArrayNotHasKey('to_upper', $array);
+        $this->assertArrayHasKey('to_upper', $array);
 
+        $this->assertEquals('upper', $array['to_upper']);
+        $this->assertEquals('11', $array['id']);
     }
 
     // override function __toString()

@@ -7,20 +7,32 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  * Revision History Version
  ********1.0.0********************
- * file created @ 2017-10-24 16:42
+ * file created @ 2017-10-25 13:43
  *********************************
  ********1.0.1********************
  *
  *********************************
  */
 
-namespace by\user;
+namespace by\component\securityCode\impl;
 
 
-class UserPo
+use by\component\securityCode\interfaces\SecurityCodeActionInterface;
+
+class SecurityCodeAction implements SecurityCodeActionInterface
 {
 
     // member function
+    public function create()
+    {
+        // TODO: Implement create() method.
+    }
+
+    public function verify()
+    {
+        // TODO: Implement verify() method.
+    }
+
 
     // construct
     public function __construct()
@@ -31,7 +43,23 @@ class UserPo
     // override function __toString()
 
     // member variables
+    private $generateWay;
 
     // getter setter
 
+    /**
+     * @return mixed
+     */
+    public function getGenerateWay()
+    {
+        return $this->generateWay;
+    }
+
+    /**
+     * @param mixed $generateWay
+     */
+    public function setGenerateWay($generateWay)
+    {
+        $this->generateWay = $generateWay;
+    }
 }

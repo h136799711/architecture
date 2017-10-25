@@ -16,6 +16,8 @@
 
 namespace by\infrastructure\helper;
 
+use by\infrastructure\base\CallResult;
+
 /**
  * 所有调用结果的帮助
  * Class CallResultHelper
@@ -25,6 +27,16 @@ class CallResultHelper
 {
 
     // member function
+
+    public static function success($data = '', $msg = 'success', $code = 0)
+    {
+        return new CallResult($data, $msg, $code);
+    }
+
+    public static function fail($data = '', $msg = 'fail', $code = -1)
+    {
+        return new CallResult($data, $msg, $code);
+    }
 
     // construct
     public function __construct()
