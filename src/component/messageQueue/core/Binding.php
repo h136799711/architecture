@@ -7,43 +7,34 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  * Revision History Version
  ********1.0.0********************
- * file created @ 2017-10-25 16:07
+ * file created @ 2017-10-26 14:30
  *********************************
  ********1.0.1********************
  *
  *********************************
  */
 
-namespace by\component\messageQueue\impl;
+namespace by\component\messageQueue\core;
 
 
-use by\component\messageQueue\interfaces\PublisherInterface;
+use by\component\messageQueue\interfaces\ExchangeInterface;
 
-/**
- * Class Publisher
- *
- * 创建连接-->创建channel-->创建交换机对象-->发送消息
- * @package by\component\messageQueue\impl
- */
-abstract class  Publisher implements PublisherInterface
+class Binding
 {
 
     // member function
-    abstract function createConnection($config = []);
-
-    abstract function createChannel($config = []);
-
-    abstract function createExchange($config = []);
-
-    abstract function createQueue($config = []);
-
-    abstract function closeAll();
 
     // construct
+    public function __construct(Queue $queue, ExchangeInterface $exchange, $routingKey = '')
+    {
+
+    }
 
     // override function __toString()
 
     // member variables
+    private $queue;
+    private $exchange;
 
     // getter setter
 

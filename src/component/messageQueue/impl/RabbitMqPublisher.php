@@ -67,11 +67,32 @@ class RabbitMqPublisher extends Publisher
         }
     }
 
+    /**
+     *
+     *  $exchange,
+     *  $type,
+     *  $passive = false,
+     *  $durable = false,
+     *  $auto_delete = true,
+     *  $internal = false,
+     *  $nowait = false,
+     *  $arguments = null,
+     *  $ticket = null
+     * @param array $config
+     */
     function createExchange($config = [])
     {
+        $exchange = ArrayHelper::getValue('exchange', $config, '');
+        $type = ArrayHelper::getValue('type', $config, 'topic');
+        $passive = ArrayHelper::getValue('passive', $config, false);
+        $durable = ArrayHelper::getValue('durable', $config, false);
+        $auto_delete = ArrayHelper::getValue('auto_delete', $config, true);
+
+        $this->channel->exchange_declare($exchange, $type, $passive, $durable, $auto_delete);
+
     }
 
-    function createQueue()
+    function createQueue($config = [])
     {
         // TODO: Implement createQueue() method.
     }

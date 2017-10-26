@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  * Revision History Version
  ********1.0.0********************
- * file created @ 2017-10-25 16:20
+ * file created @ 2017-10-26 15:46
  *********************************
  ********1.0.1********************
  *
@@ -16,12 +16,13 @@
 
 namespace by\component\messageQueue\message;
 
-/*
- * 基础队列消息对象
- * @author hebidu <email:346551990@qq.com> 
- * @modify 2017-10-26 13:44:00
+/**
+ * Class SimpleMessage
+ * @author hebidu <email:346551990@qq.com>
+ * @modify 2017-10-26 15:46:56
+ * @package by\component\messageQueue\message
  */
-abstract class BaseMessage
+class SimpleMessage extends BaseMessage
 {
 
     // member function
@@ -35,41 +36,7 @@ abstract class BaseMessage
     // override function __toString()
 
     // member variables
-    private $topic;
-    private $body;
 
     // getter setter
-
-    /**
-     * @return mixed
-     */
-    public function getTopic()
-    {
-        return $this->topic;
-    }
-
-    /**
-     * @param mixed $topic
-     */
-    public function setTopic($topic)
-    {
-        $this->topic = $topic;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getBody()
-    {
-        return $this->body;
-    }
-
-    /**
-     * @param mixed $body
-     */
-    public function setBody($body)
-    {
-        $this->body = $body;
-    }
 
 }
