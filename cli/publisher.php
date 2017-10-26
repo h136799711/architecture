@@ -24,18 +24,25 @@ $host = '47.88.216.242';
 $username = 'hebidu';
 $password = '364945361';
 $vhost = 'qqav.club';
+
 $topic = 'topic_exchange';
 $queue = 'topic_queue';
 $routingKey = 'qqav.club.test.topic.create';
 
 $admin = new RabbitAdmin(new \by\component\messageQueue\factory\ConnectionFactory($host, $username, $password, $vhost));
+
 $exchange = $admin->declareTopicExchange($topic);
 $queue = $admin->declareQueue($queue);
 $binding = new \by\component\messageQueue\core\Binding($queue, $exchange, $routingKey);
 $admin->bind($binding);
 
 $message = new \by\component\messageQueue\message\SimpleMessage();
-$message->setBody('test topic message');
-$admin->publish($message, $binding);
 
+$cnt = 30;
+while ($cnt--) {
+    $body = date('Y-m-d H:i:s');
+    $message->setBody($body);
+    sleep(1);
+    $admin->publish($message, $binding);
+}
 

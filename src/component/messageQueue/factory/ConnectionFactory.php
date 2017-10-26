@@ -23,6 +23,7 @@ use by\component\messageQueue\core\Queue;
 use by\component\messageQueue\interfaces\ExchangeInterface;
 use by\component\messageQueue\message\BaseMessage;
 use by\infrastructure\helper\ArrayHelper;
+use PhpAmqpLib\Message\AMQPMessage;
 
 class ConnectionFactory
 {
@@ -86,10 +87,21 @@ class ConnectionFactory
         return $this->connection->getConnection();
     }
 
+    public function basicConsumer(Binding $binding, $callback = null)
+    {
+
+        $this->getAMQPChannel()->basic_consume($binding->getQueueName(), '', false, true, false, false, $callback);
+
+        while (count($this->getAMQPChannel()->callbacks)) {
+            $this->getAMQPChannel()->wait();
+        }
+    }
+
     public function basicSend(BaseMessage $message, Binding $binding)
     {
-        $msg = AMQPMessage();
-        $this->getAMQPChannel()->basic_publish($message->getBody(), $binding->getExchange(), $binding->getRoutingKey());
+        $msg = new AMQPMessage();
+        $msg->setBody($message->getBody());
+        $this->getAMQPChannel()->basic_publish($msg, $binding->getExchange(), $binding->getRoutingKey());
     }
 
     /**

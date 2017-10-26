@@ -50,8 +50,7 @@ class ArrayHelper
 
     public function getValueBy($key)
     {
-
-        if (array_key_exists($key, $this->data)) {
+        if ($this->data && array_key_exists($key, $this->data)) {
             return $this->data[$key];
         }
 

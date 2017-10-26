@@ -74,10 +74,12 @@ class RabbitAdmin
 
     /**
      * 订阅
+     * @param Binding $binding
+     * @param null $callback
      */
-    public function subscribe()
+    public function subscribe(Binding $binding, $callback = null)
     {
-
+        $this->connectionFactory->basicConsumer($binding, $callback);
     }
 
     /**
