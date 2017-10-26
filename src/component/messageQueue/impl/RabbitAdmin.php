@@ -17,6 +17,9 @@
 namespace by\component\messageQueue\impl;
 
 
+use by\component\messageQueue\core\Binding;
+use by\component\messageQueue\core\exchanges\TopicExchange;
+use by\component\messageQueue\core\Queue;
 use by\component\messageQueue\factory\ConnectionFactory;
 use by\component\messageQueue\message\BaseMessage;
 
@@ -24,6 +27,50 @@ class RabbitAdmin
 {
 
     // member function
+
+    private $connectionFactory;
+    private $currentQueue;
+    private $currentExchange;
+
+    public function __destruct()
+    {
+        $this->connectionFactory->close();
+
+    }
+
+    public function __construct(ConnectionFactory $factory)
+    {
+        $this->connectionFactory = $factory;
+    }
+
+    /**
+     * 队列名称
+     * @param string $queue
+     * @return Queue
+     */
+    public function declareQueue($queue)
+    {
+        $this->currentQueue = new Queue($queue);
+        $this->connectionFactory->declareQueue($this->currentQueue);
+        return $this->currentQueue;
+    }
+
+    /**
+     * 交换机
+     * @param $exchangeName
+     * @return TopicExchange
+     */
+    public function declareTopicExchange($exchangeName)
+    {
+        $this->currentExchange = new TopicExchange($exchangeName);
+        $this->connectionFactory->declareExchange($this->currentExchange);
+        return $this->currentExchange;
+    }
+
+    public function bind(Binding $binding)
+    {
+        $this->connectionFactory->binding($binding);
+    }
 
     /**
      * 订阅
@@ -36,39 +83,16 @@ class RabbitAdmin
     /**
      * 发布
      * @param BaseMessage $message
+     * @param Binding $binding
      */
-    public function publish(BaseMessage $message)
+    public function publish(BaseMessage $message, Binding $binding)
+    {
+        $this->connectionFactory->basicSend($message, $binding);
+    }
+
+    public function close()
     {
 
     }
-
-    /*
-     * 声明一个队列
-     */
-    public function declareQueue()
-    {
-
-    }
-
-    /**
-     * 声明一个交换机
-     */
-    public function declareExchange()
-    {
-
-    }
-
-    // construct
-    public function __construct(ConnectionFactory $factory)
-    {
-        $this->connectionFactory = $factory;
-    }
-
-    // override function __toString()
-
-    // member variables
-    private $connectionFactory;
-
-    // getter setter
 
 }

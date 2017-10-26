@@ -23,19 +23,21 @@ class BaseEntity extends BaseObject
     // member function
 
     // construct
-    public function __construct()
-    {
-        // TODO construct
-    }
+    private $id;
 
     // override function __toString()
 
     // member variables
-    private $id;//数据id
-    private $createTime; // 创建时间
-    private $updateTime; // 更新时间
+    private $createTime;//数据id
+    private $updateTime; // 创建时间
+
+    public function __construct()
+    {
+        // TODO construct
+    } // 更新时间
 
     // getter setter
+
     /**
      * @return mixed
      */

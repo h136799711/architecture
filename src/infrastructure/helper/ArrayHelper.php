@@ -23,8 +23,57 @@ namespace by\infrastructure\helper;
  */
 class ArrayHelper
 {
+    private static $instance;
+    private $defaultValue = '';
+    private $data;
+
+
+    /**
+     * @param $data
+     * @return ArrayHelper
+     */
+    public function from($data)
+    {
+        $this->data = $data;
+        return $this;
+    }
+
+    /**
+     * @param $value
+     * @return ArrayHelper
+     */
+    public function defaultValue($value)
+    {
+        $this->defaultValue = $value;
+        return $this;
+    }
+
+    public function getValueBy($key)
+    {
+
+        if (array_key_exists($key, $this->data)) {
+            return $this->data[$key];
+        }
+
+        return $this->defaultValue;
+    }
+
+    public static function getInstance()
+    {
+        if (self::$instance == null) {
+            self::$instance = new ArrayHelper();
+        }
+        return self::$instance;
+    }
 
     // member function
+
+    public static function filter(&$array, $keys = [])
+    {
+        array_walk($keys, function ($vo) use (&$array) {
+            unset($array[$vo]);
+        });
+    }
 
     public static function setValueFromPost(&$param, $defaultValue = '', $scope = null)
     {
@@ -34,19 +83,6 @@ class ArrayHelper
             $array = [];
         }
         self::setValue($param, $array, $defaultValue, $scope);
-    }
-
-    public static function get_variable_name(&$var, $scope = NULL)
-    {
-        if (NULL == $scope) {
-            $scope = $GLOBALS;
-        }
-
-        $tmp = $var;
-        $var = "tmp_exists_" . mt_rand();
-        $name = array_search($var, $scope, TRUE);
-        $var = $tmp;
-        return $name;
     }
 
     /**
@@ -87,6 +123,19 @@ class ArrayHelper
             return $array[$key];
         }
         return $defaultValue;
+    }
+
+    public static function get_variable_name(&$var, $scope = NULL)
+    {
+        if (NULL == $scope) {
+            $scope = $GLOBALS;
+        }
+
+        $tmp = $var;
+        $var = "tmp_exists_" . mt_rand();
+        $name = array_search($var, $scope, TRUE);
+        $var = $tmp;
+        return $name;
     }
 
     /**

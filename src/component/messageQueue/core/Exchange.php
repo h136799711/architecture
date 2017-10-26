@@ -26,18 +26,6 @@ use by\component\messageQueue\interfaces\ExchangeInterface;
 class Exchange implements ExchangeInterface
 {
 
-    // member function
-
-    // construct
-    public function __construct($name, $exchangeType)
-    {
-        $this->setName($name);
-        $this->setExchangeType($exchangeType);
-    }
-
-    // override function __toString()
-
-    // member variables
     private $name;
     private $exchangeType;
     private $passive = false;
@@ -47,6 +35,12 @@ class Exchange implements ExchangeInterface
     private $nowait = false;
     private $arguments = null;
     private $ticket = null;
+
+    public function __construct($name, $exchangeType)
+    {
+        $this->setName($name);
+        $this->setExchangeType($exchangeType);
+    }
 
 
     // getter setter

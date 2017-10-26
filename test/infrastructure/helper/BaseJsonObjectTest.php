@@ -23,23 +23,32 @@ class BaseJsonObjectTest extends TestCase
 {
 
     // member function
+    private $id;
+
+    // override function __toString()
+
+    // member variables
+    private $toUpper;
+    private $toLower;
+
     /**
      * @covers BaseJsonObject
      * @uses   \by\infrastructure\helper\Object2DataArrayHelper
      * @group  helper
      * @group  array_helper
      */
-    public function testJsonObject(){
+    public function testJsonObject()
+    {
         $test = new BaseJsonObjectTest();
         Object2DataArrayHelper::setData($test, ['id' => '11', 'to_lower' => 'lower', 'to_upper' => 'upper']);
-        $array = Object2DataArrayHelper::getDataArrayFrom($test,['id','to_upper']);
+        $array = Object2DataArrayHelper::getDataArrayFrom($test, ['id', 'to_upper']);
         $this->assertArrayHasKey('to_upper', $array);
         $this->assertArrayHasKey('id', $array);
         $array = Object2DataArrayHelper::getDataArrayFrom($test);
         $this->assertArrayHasKey('id', $array);
         $this->assertArrayHasKey('to_upper', $array);
         $this->assertArrayNotHasKey('toUpper', $array);
-        $array = Object2DataArrayHelper::getDataArrayFrom($test,['id','toUpper','to_upper']);
+        $array = Object2DataArrayHelper::getDataArrayFrom($test, ['id', 'toUpper', 'to_upper']);
         $this->assertArrayNotHasKey('lower', $array);
         $this->assertArrayNotHasKey('toUpper', $array);
         $this->assertArrayHasKey('id', $array);
@@ -49,14 +58,8 @@ class BaseJsonObjectTest extends TestCase
         $this->assertEquals('11', $array['id']);
     }
 
-    // override function __toString()
-
-    // member variables
-    private $id;
-    private $toUpper;
-    private $toLower;
-
     // getter setter
+
     /**
      * @return mixed
      */

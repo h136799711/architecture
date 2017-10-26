@@ -7,36 +7,22 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  * Revision History Version
  ********1.0.0********************
- * file created @ 2017-10-26 13:46
+ * file created @ 2017-10-26 17:14
  *********************************
  ********1.0.1********************
  *
  *********************************
  */
 
-namespace by\component\messageQueue\constants;
+namespace by\component\messageQueue\core\exchanges;
 
 
-class PublisherType
+use by\component\messageQueue\core\Exchange;
+
+class TopicExchange extends Exchange
 {
-
-    // member function
-
-    // construct
-    /**
-     * rabbit_mq
-     */
-    const RABBIT_MQ = 1;
-
-    // override function __toString()
-
-    // member variables
-
-    public function __construct()
+    public function __construct($name)
     {
-        // TODO construct
+        parent::__construct($name, 'topic');
     }
-
-    // getter setter
-
 }

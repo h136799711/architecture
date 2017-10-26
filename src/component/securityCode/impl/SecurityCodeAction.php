@@ -23,27 +23,29 @@ class SecurityCodeAction implements SecurityCodeActionInterface
 {
 
     // member function
-    public function create()
-    {
-        // TODO: Implement create() method.
-    }
+    private $generateWay;
 
-    public function verify()
-    {
-        // TODO: Implement verify() method.
-    }
-
-
-    // construct
     public function __construct()
     {
         // TODO construct
     }
 
+
+    // construct
+
+    public function create()
+    {
+        // TODO: Implement create() method.
+    }
+
     // override function __toString()
 
     // member variables
-    private $generateWay;
+
+    public function verify()
+    {
+        // TODO: Implement verify() method.
+    }
 
     // getter setter
 

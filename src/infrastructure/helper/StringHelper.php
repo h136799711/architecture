@@ -26,6 +26,13 @@ class StringHelper
 
     // member function
 
+    private static $codeSet = '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY';
+
+    public function __construct()
+    {
+        // TODO construct
+    }
+
     /**
      * 支持随机生成只包含数字的随机字符串长度为1-8
      * @param int $length
@@ -55,6 +62,8 @@ class StringHelper
         return implode("", $code);
     }
 
+    // construct
+
     /**
      * 返回uniqid的md5值
      * @return string
@@ -63,8 +72,13 @@ class StringHelper
     {
         return md5(uniqid());
     }
+
+    // override function __toString()
+
+    // member variables
+
     /**
-     * 
+     *
      * @param $type
      * @param int $length
      * @author hebidu <email:346551990@qq.com>
@@ -75,18 +89,6 @@ class StringHelper
         // TODO 生成随机长度的字符串
 
     }
-
-    // construct
-    public function __construct()
-    {
-        // TODO construct
-    }
-
-    // override function __toString()
-
-    // member variables
-    private static $codeSet = '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY';
-
 
 
     // getter setter

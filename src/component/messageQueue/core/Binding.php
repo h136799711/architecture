@@ -21,21 +21,82 @@ use by\component\messageQueue\interfaces\ExchangeInterface;
 
 class Binding
 {
+    private $queueName;
+    private $exchange;
+    private $routingKey;
+    private $nowait;
 
-    // member function
-
-    // construct
     public function __construct(Queue $queue, ExchangeInterface $exchange, $routingKey = '')
     {
-
+        $this->setQueueName($queue->getName());
+        $this->setRoutingKey($routingKey);
+        $this->setExchange($exchange->getName());
+        $this->setNowait(false);
     }
 
-    // override function __toString()
+    /**
+     * @return mixed
+     */
+    public function getNowait()
+    {
+        return $this->nowait;
+    }
 
-    // member variables
-    private $queue;
-    private $exchange;
+    /**
+     * @param mixed $nowait
+     */
+    public function setNowait($nowait)
+    {
+        $this->nowait = $nowait;
+    }
 
-    // getter setter
+    /**
+     * @return mixed
+     */
+    public function getQueueName()
+    {
+        return $this->queueName;
+    }
+
+    /**
+     * @param mixed $queueName
+     */
+    public function setQueueName($queueName)
+    {
+        $this->queueName = $queueName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExchange()
+    {
+        return $this->exchange;
+    }
+
+    /**
+     * @param mixed $exchange
+     */
+    public function setExchange($exchange)
+    {
+        $this->exchange = $exchange;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRoutingKey()
+    {
+        return $this->routingKey;
+    }
+
+    /**
+     * @param mixed $routingKey
+     */
+    public function setRoutingKey($routingKey)
+    {
+        $this->routingKey = $routingKey;
+    }
+
 
 }

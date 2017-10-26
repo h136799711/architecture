@@ -18,7 +18,8 @@
   "autoload": {
     "psr-4": {
       "by\\": "src/",
-      "byTest\\": "test/"
+      "byTest\\": "test/",
+      "byCli\\": "cli/"
     }
   },
   "repositories": {

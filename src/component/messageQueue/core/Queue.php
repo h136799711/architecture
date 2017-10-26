@@ -23,6 +23,16 @@ class Queue
     // member function
 
     // construct
+    private $name;
+
+    // override function __toString()
+    private $durable;
+    private $exclusive;
+    private $passive;
+    private $nowait;
+    private $autoDelete;
+    private $arguments;
+
     /**
      * Queue constructor.
      * @param string $name
@@ -30,18 +40,45 @@ class Queue
     public function __construct($name)
     {
         $this->setName($name);
+        $this->setAutoDelete(true);
+        $this->setDurable(false);
+        $this->setExclusive(false);
+        $this->setNowait(false);
+        $this->setPassive(false);
+        $this->setArguments(null);
     }
 
-    // override function __toString()
+    /**
+     * @return mixed
+     */
+    public function getPassive()
+    {
+        return $this->passive;
+    }
 
-    private $name;
-    private $durable;
-    private $exclusive;
-    private $autoDelete;
-    private $arguments;
+    /**
+     * @param mixed $passive
+     */
+    public function setPassive($passive)
+    {
+        $this->passive = $passive;
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getNowait()
+    {
+        return $this->nowait;
+    }
 
-    // getter setter
+    /**
+     * @param mixed $nowait
+     */
+    public function setNowait($nowait)
+    {
+        $this->nowait = $nowait;
+    }
 
     /**
      * @return mixed

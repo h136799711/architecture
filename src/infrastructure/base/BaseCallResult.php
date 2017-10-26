@@ -21,21 +21,23 @@ abstract class BaseCallResult
 {
 
     // member function
+    private $code;
+
+    // override function __toString()
+
+    // member variables
+    private $msg;// 返回的结果码
+    private $data;//  返回消息
+
     public function __construct($data = '', $msg = '', $code = 0)
     {
         $this->setCode($code);
         $this->setMsg($msg);
         $this->setData($data);
-    }
-
-    // override function __toString()
-
-    // member variables
-    private $code;// 返回的结果码
-    private $msg;//  返回消息
-    private $data;// 返回数据
+    }// 返回数据
 
     // getter setter
+
     /**
      * @return mixed
      */

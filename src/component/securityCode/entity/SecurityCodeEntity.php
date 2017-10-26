@@ -25,15 +25,16 @@ class SecurityCodeEntity extends BaseEntity
     // member function
 
     // construct
-    public function __construct()
-    {
-        // TODO construct
-    }
+    private $code;
 
     // override function __toString()
 
     // member variables
-    private $code;
+
+    public function __construct()
+    {
+        // TODO construct
+    }
 
     // getter setter
 

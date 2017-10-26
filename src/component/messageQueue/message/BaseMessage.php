@@ -25,18 +25,17 @@ abstract class BaseMessage
 {
 
     // member function
+    abstract function convert();
 
     // construct
+    private $topic;
+    // member variables
+    private $body;
+
     public function __construct()
     {
         // TODO construct
     }
-
-    // override function __toString()
-
-    // member variables
-    private $topic;
-    private $body;
 
     // getter setter
 

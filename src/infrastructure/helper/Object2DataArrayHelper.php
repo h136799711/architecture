@@ -20,6 +20,11 @@ namespace by\infrastructure\helper;
 class Object2DataArrayHelper
 {
     // member function
+    public function __construct()
+    {
+        // TODO construct
+    }
+
     public static function getAllProperties($instance)
     {
         $parent = new \ReflectionClass($instance);
@@ -29,6 +34,7 @@ class Object2DataArrayHelper
         }
         return $properties;
     }
+
     /**
      * 将对象实例的get函数返回的数据封装为数组,键都是小写字母加下划线形式
      * 支持父类的属性封装,get函数只支持 public 作用域
@@ -66,6 +72,11 @@ class Object2DataArrayHelper
         return $data;
     }
 
+    public static function uncamelize($camelCaps, $separator = '_')
+    {
+        return strtolower(preg_replace('/([a-z])([A-Z])/', "$1" . $separator . "$2", $camelCaps));
+    }
+
     public static function convertUnderline($str)
     {
         $str = ucwords(str_replace('_', ' ', $str));
@@ -73,10 +84,7 @@ class Object2DataArrayHelper
         return $str;
     }
 
-    public static function uncamelize($camelCaps, $separator = '_')
-    {
-        return strtolower(preg_replace('/([a-z])([A-Z])/', "$1" . $separator . "$2", $camelCaps));
-    }
+    // construct
 
     /**
      * 将传入的键值对数组通过set方法进行赋值到一个类实例的属性
@@ -119,12 +127,6 @@ class Object2DataArrayHelper
                 }
             }
         }
-    }
-
-    // construct
-    public function __construct()
-    {
-        // TODO construct
     }
 
     // override function __toString()

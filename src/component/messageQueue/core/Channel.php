@@ -28,6 +28,37 @@ class Channel
 {
     // member function
     /**
+     * @var ConnectionFactory
+     *
+     */
+    private $connectionFactory;
+
+
+    // construct
+    /**
+     * @var AMQPChannel
+     *
+     */
+    private $channel;
+
+
+    // override function __toString()
+
+    // member variables
+    private $channelId;
+    private $autoDecode;
+
+    public function __construct(ConnectionFactory $factory)
+    {
+        $this->connectionFactory = $factory;
+        if (!$this->connectionFactory->getAMQPConnection()->isConnected()) {
+            throw new \Exception('AMQP connection is not connect');
+        }
+        $this->setChannelId(null);
+        $this->setAutoDecode(true);
+    }
+
+    /**
      *
      */
     public function create()
@@ -36,50 +67,7 @@ class Channel
     }
 
 
-    // construct
-    public function __construct(ConnectionFactory $factory)
-    {
-        $this->connectionFactory = $factory;
-        $this->setChannelId(null);
-        $this->setAutoDecode(true);
-    }
-
-
-    // override function __toString()
-
-    // member variables
-
-    /**
-     * @var ConnectionFactory
-     *
-     */
-    private $connectionFactory;
-    /**
-     * @var AMQPChannel
-     *
-     */
-    private $channel;
-    private $channelId;
-    private $autoDecode;
-
-
     // getter setter
-
-    /**
-     * @return AMQPChannel
-     */
-    public function getChannel()
-    {
-        return $this->channel;
-    }
-
-    /**
-     * @param AMQPChannel $channel
-     */
-    public function setChannel($channel)
-    {
-        $this->channel = $channel;
-    }
 
     /**
      * @return mixed
@@ -111,6 +99,22 @@ class Channel
     public function setAutoDecode($autoDecode)
     {
         $this->autoDecode = $autoDecode;
+    }
+
+    /**
+     * @return AMQPChannel
+     */
+    public function getAMQPChannel()
+    {
+        return $this->channel;
+    }
+
+    /**
+     * @param AMQPChannel $channel
+     */
+    public function setAMQPChannel($channel)
+    {
+        $this->channel = $channel;
     }
 
     /**

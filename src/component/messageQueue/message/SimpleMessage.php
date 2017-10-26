@@ -27,6 +27,11 @@ class SimpleMessage extends BaseMessage
 
     // member function
 
+    public function convert()
+    {
+        return $this->getBody();
+    }
+
     // construct
     public function __construct()
     {

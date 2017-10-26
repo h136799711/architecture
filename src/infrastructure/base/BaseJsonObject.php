@@ -17,24 +17,24 @@
 namespace by\infrastructure\base;
 
 
-use by\infrastructure\SetDataHelper;
+use by\infrastructure\helper\Object2DataArrayHelper;
 use by\interfaces\ToJsonStringInterfaces;
 
 class BaseJsonObject extends BaseObject implements ToJsonStringInterfaces
 {
 
     // member function
-    function toJsonString()
+    public function __toString()
     {
-        $data = SetDataHelper::getDataArrayFrom($this);
-        return json_encode($data);
+        return $this->toJsonString();
     }
 
     // override function __toString()
 
-    public function __toString()
+    function toJsonString()
     {
-        return $this->toJsonString();
+        $data = Object2DataArrayHelper::getDataArrayFrom($this);
+        return json_encode($data);
     }
 
     // member variables

@@ -28,20 +28,21 @@ class CallResultHelper
 
     // member function
 
+    public function __construct()
+    {
+        // TODO construct
+    }
+
     public static function success($data = '', $msg = 'success', $code = 0)
     {
         return new CallResult($data, $msg, $code);
     }
 
+    // construct
+
     public static function fail($data = '', $msg = 'fail', $code = -1)
     {
         return new CallResult($data, $msg, $code);
-    }
-
-    // construct
-    public function __construct()
-    {
-        // TODO construct
     }
 
     // override function __toString()

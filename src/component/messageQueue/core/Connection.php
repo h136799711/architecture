@@ -28,59 +28,53 @@ class Connection
 {
 
     // member function
-    public function create()
-    {
-        $this->connection = new AMQPStreamConnection($this->getHost(), $this->getPort(), $this->getUsername(), $this->getPassword(), $this->getVhost());
-    }
-
-    // construct
-    public function __construct($host, $username = '', $password = '', $vhost = '/', $port = '5672')
-    {
-        $this->setHost($host);
-        $this->setUsername($username);
-        $this->setPassword($password);
-    }
-
-    // override function __toString()
-
-    // member variables
-
     /**
      * @var AbstractConnection
      */
     private $connection;
+
+    // construct
     private $username;
+
+    // override function __toString()
+
+    // member variables
     private $password;
     private $host;
     private $vhost;
     private $port;
 
+    public function __construct($host, $username = '', $password = '', $vhost = '/', $port = '5672')
+    {
+        $this->setHost($host);
+        $this->setUsername($username);
+        $this->setPassword($password);
+        $this->setPort($port);
+        $this->setVhost($vhost);
+    }
+
+    public function create()
+    {
+        $this->connection = new AMQPStreamConnection($this->getHost(), $this->getPort(), $this->getUsername(), $this->getPassword(), $this->getVhost());
+    }
+
 
     // getter setter
 
     /**
-     * @return AbstractConnection
-     */
-    public function getConnection()
-    {
-        return $this->connection;
-    }
-
-
-    /**
      * @return mixed
      */
-    public function getVhost()
+    public function getHost()
     {
-        return $this->vhost;
+        return $this->host;
     }
 
     /**
-     * @param mixed $vhost
+     * @param mixed $host
      */
-    public function setVhost($vhost)
+    public function setHost($host)
     {
-        $this->vhost = $vhost;
+        $this->host = $host;
     }
 
     /**
@@ -98,7 +92,6 @@ class Connection
     {
         $this->port = $port;
     }
-
 
     /**
      * @return mixed
@@ -135,17 +128,28 @@ class Connection
     /**
      * @return mixed
      */
-    public function getHost()
+    public function getVhost()
     {
-        return $this->host;
+        return $this->vhost;
     }
 
     /**
-     * @param mixed $host
+     * @param mixed $vhost
      */
-    public function setHost($host)
+    public function setVhost($vhost)
     {
-        $this->host = $host;
+        $this->vhost = $vhost;
+    }
+
+    /**
+     * @return AbstractConnection
+     */
+    public function getConnection()
+    {
+        if (!$this->connection) {
+            $this->create();
+        }
+        return $this->connection;
     }
 
 }

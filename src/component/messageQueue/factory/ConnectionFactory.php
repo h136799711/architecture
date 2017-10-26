@@ -16,77 +16,19 @@
 
 namespace by\component\messageQueue\factory;
 
+use by\component\messageQueue\core\Binding;
 use by\component\messageQueue\core\Channel;
 use by\component\messageQueue\core\Connection;
+use by\component\messageQueue\core\Queue;
 use by\component\messageQueue\interfaces\ExchangeInterface;
+use by\component\messageQueue\message\BaseMessage;
+use by\infrastructure\helper\ArrayHelper;
 
 class ConnectionFactory
 {
 
     // member function
 
-    public function declareExchange(ExchangeInterface $exchange, Channel $channel = null)
-    {
-
-//        $arguments = $exchange->getArguments();
-
-//        $passive = ArrayHelper::get
-//        $durable = false,
-//        $auto_delete = true,
-//        $internal = false,
-//        $nowait = false,
-//        $arguments = null,
-//        $ticket = null
-//        $channel->getChannel()->exchange_declare($exchange->getName(), $exchange->getExchangeType());
-    }
-
-    /**
-     *
-     * @return Channel
-     */
-    public function getChannel()
-    {
-        if ($this->channel) {
-            $this->channel = new Channel($this);
-        }
-
-        return $this->channel;
-    }
-
-    /**
-     *
-     * @return Channel
-     */
-    public function getNewChannel()
-    {
-        $this->channel = new Channel($this);
-        return $this->channel;
-    }
-
-    public function getAMQPConnection()
-    {
-        return $this->connection->getConnection();
-    }
-
-    public function getConnection()
-    {
-        return $this->connection;
-    }
-
-    public function setUsername($username)
-    {
-        $this->connection->setUsername($username);
-    }
-
-    // construct
-    public function __construct($host, $username = '', $password = '', $vhost = '/', $port = '5672')
-    {
-        $this->connection = new Connection($host, $username, $password, $vhost, $port);
-    }
-
-    // override function __toString()
-
-    // member variables
     /**
      * 目前一个连接对象
      * @var Connection
@@ -98,6 +40,123 @@ class ConnectionFactory
      * 一个channel
      */
     private $channel;
+
+    public function __construct($host, $username = '', $password = '', $vhost = '/', $port = '5672')
+    {
+        $this->connection = new Connection($host, $username, $password, $vhost, $port);
+    }
+
+    public function __destruct()
+    {
+        $this->close();
+    }
+
+    public function close()
+    {
+        if ($this->getAMQPChannel()) {
+            $this->getAMQPChannel()->close();
+        }
+        if ($this->getAMQPConnection()) {
+            $this->getAMQPConnection()->close();
+        }
+    }
+
+    public function getAMQPChannel()
+    {
+        return $this->getChannel()->getAMQPChannel();
+    }
+
+    /**
+     *
+     * @return Channel
+     */
+    public function getChannel()
+    {
+        if (!$this->channel) {
+            $this->channel = new Channel($this);
+            // TODO chanel 创建 增加参数
+            $this->channel->create();
+        }
+
+        return $this->channel;
+    }
+
+    public function getAMQPConnection()
+    {
+        return $this->connection->getConnection();
+    }
+
+    public function basicSend(BaseMessage $message, Binding $binding)
+    {
+        $msg = AMQPMessage();
+        $this->getAMQPChannel()->basic_publish($message->getBody(), $binding->getExchange(), $binding->getRoutingKey());
+    }
+
+    /**
+     * 绑定生效 队列x交换机
+     * @param Binding $binding
+     * @return mixed|null
+     */
+    public function binding(Binding $binding)
+    {
+        return $this->getAMQPChannel()->queue_bind($binding->getQueueName(), $binding->getExchange(), $binding->getRoutingKey(), $binding->getNowait());
+    }
+
+    /**
+     * 创建一个队列
+     * @param Queue $queue
+     * @return mixed|null
+     */
+    public function declareQueue(Queue $queue)
+    {
+        return $this->getAMQPChannel()->queue_declare($queue->getName(), $queue->getPassive(), $queue->getDurable(), $queue->getExclusive(), $queue->getAutoDelete(), $queue->getNowait(), $queue->getArguments());
+    }
+
+    /**
+     * 声明一个交换机
+     * @param ExchangeInterface $exchange
+     * @return mixed|null
+     */
+    public function declareExchange(ExchangeInterface $exchange)
+    {
+        $arguments = $exchange->getArguments();
+        $instance = ArrayHelper::getInstance()->from($arguments);
+        $passive = $instance->defaultValue(false)->getValueBy('passive');
+        $durable = $instance->defaultValue(false)->getValueBy('durable');
+        $autoDelete = $instance->defaultValue(true)->getValueBy('auto_delete');
+        $internal = $instance->defaultValue(false)->getValueBy('internal');
+        $nowait = $instance->defaultValue(false)->getValueBy('nowait');
+        $ticket = $instance->defaultValue(null)->getValueBy('ticket');
+        ArrayHelper::filter($arguments, ['passive', 'durable', 'auto_delete']);
+
+        return $this->getAMQPChannel()->exchange_declare($exchange->getName(), $exchange->getExchangeType(), $passive, $durable, $autoDelete, $internal, $nowait, $arguments, $ticket);
+    }
+
+    // construct
+
+    /**
+     *
+     * @return Channel
+     */
+    public function getNewChannel()
+    {
+        $this->channel = new Channel($this);
+        return $this->channel;
+    }
+
+    // override function __toString()
+
+    // member variables
+
+    public function getConnection()
+    {
+        return $this->connection;
+    }
+
+    public function setUsername($username)
+    {
+        $this->connection->setUsername($username);
+    }
 
     // getter setter
 

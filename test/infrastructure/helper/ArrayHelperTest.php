@@ -24,15 +24,31 @@ class ArrayHelperTest extends TestCase
 {
 
     // member function
-    public function list_by_keys($data, $var1, ...$var)
+    /**
+     * @covers ArrayHelper::filter
+     * @uses   ArrayHelper
+     * @group helper
+     * @group ArrayHelper
+     */
+    public function testFilter()
     {
-
+        $data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+        $data2 = ['k1' => 1, 'k2' => 2, 'k3' => 3, 'k4' => 4];
+        $key = [3, 4, 5, 6];
+        $key2 = ['k2', 'k3'];
+        $lengthOfData = count($data);
+        $lengthOfData2 = count($data2);
+        ArrayHelper::filter($data, $key);
+        $this->assertEquals($lengthOfData - count($key), count($data));
+        ArrayHelper::filter($data2, $key2);
+        $this->assertEquals($lengthOfData2 - count($key2), count($data2));
     }
 
     /**
      * @covers ArrayHelper::setValue()
      * @uses   ArrayHelper
      * @group helper
+     * @group ArrayHelper
      */
     public function testSetValue()
     {
@@ -40,7 +56,6 @@ class ArrayHelperTest extends TestCase
         $obj->id = 123456;
         $_POST = [''];
         $arr = [0, 1, 2, 3];
-        var_dump(get_defined_vars());
         $data = ['id' => $obj, 'username' => 'hebidu', 'password' => '123456', 'test' => $arr];
         ArrayHelper::setValue($username, $data, 'default', get_defined_vars());
         $this->assertEquals('hebidu', $username);
@@ -50,7 +65,6 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals($arr, $test);
         ArrayHelper::setValue($id, $data, 'default', get_defined_vars());
         $this->assertEquals($obj, $id);
-        var_dump(get_defined_vars());
     }
 
     // override function __toString()
