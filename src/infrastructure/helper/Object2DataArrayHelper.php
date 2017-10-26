@@ -108,10 +108,13 @@ class Object2DataArrayHelper
                 $key = self::uncamelize($name);
                 $methodName = 'set' . ucfirst($name);
                 if ($ref->hasMethod($methodName)) {
-                    if (array_key_exists($key, $data)) {
-                        $instance->$methodName($data[$key]);
-                    } elseif ((array_key_exists($name, $data))) {
-                        $instance->$methodName($data[$name]);
+                    $method = $ref->getMethod($methodName);
+                    if ($method->isPublic()) {
+                        if (array_key_exists($key, $data)) {
+                            $method->invoke($instance, $data[$key]);
+                        } elseif ((array_key_exists($name, $data))) {
+                            $method->invoke($instance, $data[$name]);
+                        }
                     }
                 }
             }

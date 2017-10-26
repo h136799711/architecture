@@ -7,27 +7,37 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  * Revision History Version
  ********1.0.0********************
- * file created @ 2017-10-24 16:28
+ * file created @ 2017-10-25 16:07
  *********************************
  ********1.0.1********************
  *
  *********************************
  */
 
-namespace by\infrastructure;
+namespace by\component\messageQueue\impl;
 
 
-class MessageQueue
+use by\component\messageQueue\interfaces\PublisherInterface;
+
+/**
+ * Class Publisher
+ *
+ * 创建连接-->创建channel-->创建交换机对象-->发送消息
+ * @package by\component\messageQueue\impl
+ */
+abstract class  Publisher implements PublisherInterface
 {
 
     // member function
-    public function consumer(){
+    abstract function createConnection($config = []);
 
-    }
+    abstract function createChannel($config = []);
 
-    public function producer(){
+    abstract function createExchange($config = []);
 
-    }
+    abstract function createQueue($config = []);
+
+    abstract function closeAll();
 
     // construct
     public function __construct()

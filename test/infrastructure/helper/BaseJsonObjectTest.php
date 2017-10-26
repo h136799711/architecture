@@ -27,12 +27,11 @@ class BaseJsonObjectTest extends TestCase
      * @covers BaseJsonObject
      * @uses   \by\infrastructure\helper\Object2DataArrayHelper
      * @group  helper
+     * @group  array_helper
      */
     public function testJsonObject(){
         $test = new BaseJsonObjectTest();
-        $test->setId('11');
-        $test->setToLower('lower');
-        $test->setToUpper('upper');
+        Object2DataArrayHelper::setData($test, ['id' => '11', 'to_lower' => 'lower', 'to_upper' => 'upper']);
         $array = Object2DataArrayHelper::getDataArrayFrom($test,['id','to_upper']);
         $this->assertArrayHasKey('to_upper', $array);
         $this->assertArrayHasKey('id', $array);

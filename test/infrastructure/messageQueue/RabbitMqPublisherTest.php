@@ -7,31 +7,33 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  * Revision History Version
  ********1.0.0********************
- * file created @ 2017-10-24 16:36
+ * file created @ 2017-10-26 10:25
  *********************************
  ********1.0.1********************
  *
  *********************************
  */
 
-namespace by\infrastructure;
+namespace byTest\infrastructure\messageQueue;
 
 
-class BaseMessagePo
+use by\component\messageQueue\impl\RabbitMqPublisher;
+use PHPUnit\Framework\TestCase;
+
+class RabbitMqPublisherTest extends TestCase
 {
 
     // member function
+    public function testPublisher()
+    {
+        $publisherInterface = new RabbitMqPublisher();
+    }
 
     // construct
-    public function __construct()
-    {
-        // TODO construct
-    }
 
     // override function __toString()
 
     // member variables
-    private $data;
 
     // getter setter
 
