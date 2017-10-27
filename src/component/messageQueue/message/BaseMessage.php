@@ -21,38 +21,79 @@ namespace by\component\messageQueue\message;
  * @author hebidu <email:346551990@qq.com> 
  * @modify 2017-10-26 13:44:00
  */
-abstract class BaseMessage
+use by\component\messageQueue\interfaces\MessageInterface;
+
+abstract class BaseMessage implements MessageInterface
 {
 
     // member function
     abstract function convert();
 
-    // construct
-    private $topic;
-    // member variables
+    /**
+     * TODO 未明白有什么作用
+     * @var boolean
+     */
+    private $truncated;
+    /**
+     * 消息长度 可用strlen($body)得出-UTF-8编码
+     * @var integer
+     */
+    private $bodySize;
+    /**
+     * 消息主体
+     * @var string
+     */
     private $body;
+    /**
+     * 是否强制
+     * @var  boolean
+     */
+    private $mandatory;
+    /**
+     * 是否直接
+     * @var boolean
+     */
+    private $immeadiate;
 
     public function __construct()
     {
-        // TODO construct
+        $this->setBodySize(0);
+        $this->setBody('');
+        $this->setTruncated(false);
+        $this->setImmeadiate(false);
+        $this->setMandatory(false);
     }
 
-    // getter setter
+    /**
+     * @return boolean
+     */
+    public function getTruncated()
+    {
+        return $this->truncated;
+    }
+
+    /**
+     * @param boolean $truncated
+     */
+    public function setTruncated($truncated)
+    {
+        $this->truncated = $truncated;
+    }
 
     /**
      * @return mixed
      */
-    public function getTopic()
+    public function getBodySize()
     {
-        return $this->topic;
+        return $this->bodySize;
     }
 
     /**
-     * @param mixed $topic
+     * @param mixed $bodySize
      */
-    public function setTopic($topic)
+    public function setBodySize($bodySize)
     {
-        $this->topic = $topic;
+        $this->bodySize = $bodySize < 0 ? 0 : $bodySize;
     }
 
     /**
@@ -69,6 +110,38 @@ abstract class BaseMessage
     public function setBody($body)
     {
         $this->body = $body;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMandatory()
+    {
+        return $this->mandatory;
+    }
+
+    /**
+     * @param bool $mandatory
+     */
+    public function setMandatory($mandatory)
+    {
+        $this->mandatory = $mandatory;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isImmeadiate()
+    {
+        return $this->immeadiate;
+    }
+
+    /**
+     * @param bool $immeadiate
+     */
+    public function setImmeadiate($immeadiate)
+    {
+        $this->immeadiate = $immeadiate;
     }
 
 }

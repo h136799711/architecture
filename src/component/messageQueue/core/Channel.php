@@ -18,6 +18,7 @@ namespace by\component\messageQueue\core;
 
 
 use by\component\messageQueue\factory\ConnectionFactory;
+use by\infrastructure\helper\ArrayHelper;
 use PhpAmqpLib\Channel\AMQPChannel;
 
 /**
@@ -58,12 +59,41 @@ class Channel
         $this->setAutoDecode(true);
     }
 
+    public function setAckHandler($callback)
+    {
+        $this->channel->set_ack_handler($callback);
+    }
+
+    public function setNAckHandler($callback)
+    {
+        $this->channel->set_nack_handler($callback);
+    }
+
+    public function setReturnHandler($callback)
+    {
+        $this->channel->set_return_listener($callback);
+    }
+
     /**
-     *
+     * 设置消息传输内容限制长度
+     * @param $maxBytes
      */
-    public function create()
+    public function setBodySizeLimit($maxBytes)
+    {
+        $this->channel->setBodySizeLimit($maxBytes);
+    }
+
+    /**
+     * body_size_limit
+     * @param array $config
+     */
+    public function create($config = [])
     {
         $this->channel = new AMQPChannel($this->connectionFactory->getAMQPConnection(), $this->getChannelId(), $this->getAutoDecode());
+        $bodySizeLimit = ArrayHelper::getValue('body_size_limit', $config);
+        if (!empty($bodySizeLimit)) {
+            $this->setBodySizeLimit($bodySizeLimit);
+        }
     }
 
 

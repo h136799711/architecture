@@ -24,6 +24,33 @@ class ArrayHelperTest extends TestCase
 {
 
     // member function
+
+    /**
+     * @covers ArrayHelper::getValueBy()
+     * @uses   ArrayHelper
+     * @group helper
+     * @group array_helper
+     */
+    public function testArrayHelperGetValueBy()
+    {
+
+        $arguments = [
+            'passive' => true,
+            'auto_delete' => false,
+            'ticket' => []
+        ];
+        $instance = ArrayHelper::getInstance()->from($arguments);
+        $passive = $instance->getValueBy('passive', false);
+        $autoDelete = $instance->getValueBy('auto_delete', true);
+        $ticket = $instance->getValueBy('ticket', null);
+        $ticket2 = $instance->getValueBy('ticket2', null);
+
+        $this->assertEquals(true, $passive);
+        $this->assertEquals(false, $autoDelete);
+        $this->assertEquals([], $ticket);
+        $this->assertEquals(null, $ticket2);
+    }
+
     /**
      * @covers ArrayHelper::filter
      * @uses   ArrayHelper

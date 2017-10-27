@@ -16,7 +16,12 @@
 
 namespace byCli;
 
-use by\component\messageQueue\impl\RabbitAdmin;
+use by\component\messageQueue\builder\BindBuilder;
+use by\component\messageQueue\core\exchanges\DirectExchange;
+use by\component\messageQueue\core\Queue;
+use by\component\messageQueue\facade\RabbitAdmin;
+use by\component\messageQueue\factory\ConnectionFactory;
+use by\component\messageQueue\message\JsonMessage;
 
 require_once '../vendor/autoload.php';
 
@@ -25,24 +30,34 @@ $username = 'hebidu';
 $password = '364945361';
 $vhost = 'qqav.club';
 
-$topic = 'topic_exchange';
-$queue = 'topic_queue';
-$routingKey = 'qqav.club.test.topic.create';
+$exchangeName = 'direct_exchange';
+$queueName = 'direct';
+$routingKey = 'qqav.club.test.topic.delete';
+// 定义路由交换机
+$exchange = new DirectExchange($exchangeName);
+// 定义队列
+$queue = new Queue($queueName);
+$queue->setPassive(false);
+// 队列-交换机-绑定关系定义
+$binding = BindBuilder::queue($queue)->bind($exchange)->with($routingKey)->build();
 
-$admin = new RabbitAdmin(new \by\component\messageQueue\factory\ConnectionFactory($host, $username, $password, $vhost));
+// 总控初始化
+$admin = new RabbitAdmin(new ConnectionFactory($host, $username, $password, $vhost));
+// 创建交换机-队列-绑定关系
+$admin->declareExchange($exchange)->declareQueue($queue)->bind($binding);
 
-$exchange = $admin->declareTopicExchange($topic);
-$queue = $admin->declareQueue($queue);
-$binding = new \by\component\messageQueue\core\Binding($queue, $exchange, $routingKey);
-$admin->bind($binding);
+var_dump($admin->getLastDeclareQueueInfo());
+var_dump($admin->getLastDeclareExchangeInfo());
 
-$message = new \by\component\messageQueue\message\SimpleMessage();
+// 创建消息
+$message = new JsonMessage();
 
-$cnt = 30;
+$cnt = 2;
 while ($cnt--) {
-    $body = date('Y-m-d H:i:s');
+    $body = json_encode(['username' => 'hebidu', 'nickname' => '何必都']);
+    $total = strlen($body);
+    $message->setBodySize($total);
     $message->setBody($body);
-    sleep(1);
     $admin->publish($message, $binding);
 }
 

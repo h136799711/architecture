@@ -7,34 +7,23 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  * Revision History Version
  ********1.0.0********************
- * file created @ 2017-10-26 10:25
+ * file created @ 2017-10-27 14:30
  *********************************
  ********1.0.1********************
  *
  *********************************
  */
 
-namespace byTest\infrastructure\messageQueue;
+namespace by\component\messageQueue\core\consumer;
 
 
-use by\component\messageQueue\impl\RabbitMqPublisher;
-use PHPUnit\Framework\TestCase;
+use by\component\messageQueue\core\Consumer;
+use by\component\messageQueue\interfaces\ConsumerMessageInterface;
 
-class RabbitMqPublisherTest extends TestCase
+class PrintConsumer extends Consumer implements ConsumerMessageInterface
 {
-
-    // member function
-    public function testPublisher()
+    public function onMessage($msg)
     {
-        $publisherInterface = new RabbitMqPublisher();
+        echo json_encode($msg), "\n";
     }
-
-    // construct
-
-    // override function __toString()
-
-    // member variables
-
-    // getter setter
-
 }

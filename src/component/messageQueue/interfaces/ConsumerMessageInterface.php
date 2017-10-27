@@ -7,28 +7,17 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  * Revision History Version
  ********1.0.0********************
- * file created @ 2017-10-26 14:48
+ * file created @ 2017-10-27 14:30
  *********************************
  ********1.0.1********************
  *
  *********************************
  */
 
-namespace by\component\messageQueue\constants;
+namespace by\component\messageQueue\interfaces;
 
 
-class ExchangeType
+interface ConsumerMessageInterface
 {
-
-    // member function
-
-    // construct
-    // override function __toString()
-
-    // member variables
-
-    const TOPIC = 'topic';
-
-    // getter setter
-
+    public function onMessage($msg);
 }

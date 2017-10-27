@@ -38,23 +38,13 @@ class ArrayHelper
         return $this;
     }
 
-    /**
-     * @param $value
-     * @return ArrayHelper
-     */
-    public function defaultValue($value)
-    {
-        $this->defaultValue = $value;
-        return $this;
-    }
-
-    public function getValueBy($key)
+    public function getValueBy($key, $defaultValue = '')
     {
         if ($this->data && array_key_exists($key, $this->data)) {
             return $this->data[$key];
         }
 
-        return $this->defaultValue;
+        return $defaultValue;
     }
 
     public static function getInstance()

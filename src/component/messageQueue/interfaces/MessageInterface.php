@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  * Revision History Version
  ********1.0.0********************
- * file created @ 2017-10-25 16:15
+ * file created @ 2017-10-27 14:03
  *********************************
  ********1.0.1********************
  *
@@ -17,9 +17,9 @@
 namespace by\component\messageQueue\interfaces;
 
 
-interface PublisherInterface
+interface MessageInterface
 {
+    function getMandatory();
 
-    // member function
-    function publish($params);
+    function getImmeadiate();
 }

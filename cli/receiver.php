@@ -16,7 +16,10 @@
 
 namespace byCli;
 
-use by\component\messageQueue\impl\RabbitAdmin;
+use by\component\messageQueue\core\consumer\PrintConsumer;
+use by\component\messageQueue\core\Queue;
+use by\component\messageQueue\facade\RabbitAdmin;
+use by\component\messageQueue\factory\ConnectionFactory;
 
 require_once '../vendor/autoload.php';
 
@@ -24,21 +27,20 @@ $host = '47.88.216.242';
 $username = 'hebidu';
 $password = '364945361';
 $vhost = 'qqav.club';
-$topic = 'topic_exchange';
-$queue = 'topic_queue';
-$routingKey = 'qqav.club.test.topic.create';
+//$topic = 'direct_exchange';
+$queueName = 'direct';
+//$routingKey = 'qqav.club.test.topic.create';
 
-$admin = new RabbitAdmin(new \by\component\messageQueue\factory\ConnectionFactory($host, $username, $password, $vhost));
+$admin = new RabbitAdmin(new ConnectionFactory($host, $username, $password, $vhost));
 
-$exchange = $admin->declareTopicExchange($topic);
-$queue = $admin->declareQueue($queue);
-$binding = new \by\component\messageQueue\core\Binding($queue, $exchange, $routingKey);
-$admin->bind($binding);
-
-$callback = function ($msg) {
-    echo ' [x] ', $msg->delivery_info['routing_key'], ':', $msg->body, "\n";
-};
-
-$admin->subscribe($binding, $callback);
+//$exchange = $admin->declareDirectExchange($topic);
+$queue = new Queue($queueName);
+$queue->setPassive(false);
+$admin->declareQueue($queue);
+var_dump($admin->getLastDeclareQueueInfo());
+//$binding = new \by\component\messageQueue\core\Binding($queue, $exchange, $routingKey);
+//$admin->bind($binding);
+$consumer = new PrintConsumer($queueName);
+$admin->subscribeConsumer($consumer);
 
 

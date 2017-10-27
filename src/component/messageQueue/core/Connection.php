@@ -146,8 +146,13 @@ class Connection
      */
     public function getConnection()
     {
+        // 不存在则创建
         if (!$this->connection) {
             $this->create();
+        }
+        // 存在但是断开的，则重连
+        if (!$this->connection->isConnected()) {
+            $this->connection->reconnect();
         }
         return $this->connection;
     }

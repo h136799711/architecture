@@ -19,8 +19,11 @@ namespace by\component\messageQueue\factory;
 use by\component\messageQueue\core\Binding;
 use by\component\messageQueue\core\Channel;
 use by\component\messageQueue\core\Connection;
+use by\component\messageQueue\core\Consumer;
 use by\component\messageQueue\core\Queue;
+use by\component\messageQueue\interfaces\ConsumerMessageInterface;
 use by\component\messageQueue\interfaces\ExchangeInterface;
+use by\component\messageQueue\interfaces\MessageInterface;
 use by\component\messageQueue\message\BaseMessage;
 use by\infrastructure\helper\ArrayHelper;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -29,7 +32,10 @@ class ConnectionFactory
 {
 
     // member function
-
+    private $config = [
+//        'body_size_limit'=>50
+    ];
+    private $ackCallback;
     /**
      * 目前一个连接对象
      * @var Connection
@@ -75,8 +81,11 @@ class ConnectionFactory
     {
         if (!$this->channel) {
             $this->channel = new Channel($this);
-            // TODO chanel 创建 增加参数
-            $this->channel->create();
+            // chanel 创建 增加参数
+            $this->channel->create($this->config);
+            if ($this->ackCallback) {
+                $this->channel->setAckHandler($this->ackCallback);
+            }
         }
 
         return $this->channel;
@@ -87,10 +96,27 @@ class ConnectionFactory
         return $this->connection->getConnection();
     }
 
-    public function basicConsumer(Binding $binding, $callback = null)
+
+    public function consumer(Consumer $consumer)
     {
 
-        $this->getAMQPChannel()->basic_consume($binding->getQueueName(), '', false, true, false, false, $callback);
+        $callback = null;
+
+        if ($consumer instanceof ConsumerMessageInterface) {
+            $callback = array($consumer, 'onMessage');
+        }
+
+        $this->getAMQPChannel()->basic_consume($consumer->getQueueName(), '', false, true, false, false, $callback);
+
+        while (count($this->getAMQPChannel()->callbacks)) {
+            $this->getAMQPChannel()->wait();
+        }
+    }
+
+    public function basicConsumer(Queue $queue, $callback = null)
+    {
+
+        $this->getAMQPChannel()->basic_consume($queue->getName(), '', false, true, false, false, $callback);
 
         while (count($this->getAMQPChannel()->callbacks)) {
             $this->getAMQPChannel()->wait();
@@ -100,8 +126,18 @@ class ConnectionFactory
     public function basicSend(BaseMessage $message, Binding $binding)
     {
         $msg = new AMQPMessage();
+        $msg->setIsTruncated($message->getTruncated());
+        if ($message->getBodySize() > 0) {
+            $msg->setBodySize($message->getBodySize());
+        }
         $msg->setBody($message->getBody());
-        $this->getAMQPChannel()->basic_publish($msg, $binding->getExchange(), $binding->getRoutingKey());
+        $mandatory = false;
+        $immediate = false;
+        if ($message instanceof MessageInterface) {
+            $mandatory = $message->getMandatory();
+            $immediate = $message->getImmeadiate();
+        }
+        $this->getAMQPChannel()->basic_publish($msg, $binding->getExchange(), $binding->getRoutingKey(), $mandatory, $immediate);
     }
 
     /**
@@ -133,12 +169,12 @@ class ConnectionFactory
     {
         $arguments = $exchange->getArguments();
         $instance = ArrayHelper::getInstance()->from($arguments);
-        $passive = $instance->defaultValue(false)->getValueBy('passive');
-        $durable = $instance->defaultValue(false)->getValueBy('durable');
-        $autoDelete = $instance->defaultValue(true)->getValueBy('auto_delete');
-        $internal = $instance->defaultValue(false)->getValueBy('internal');
-        $nowait = $instance->defaultValue(false)->getValueBy('nowait');
-        $ticket = $instance->defaultValue(null)->getValueBy('ticket');
+        $passive = $instance->getValueBy('passive', false);
+        $durable = $instance->getValueBy('durable', false);
+        $autoDelete = $instance->getValueBy('auto_delete', true);
+        $internal = $instance->getValueBy('internal', false);
+        $nowait = $instance->getValueBy('nowait', false);
+        $ticket = $instance->getValueBy('ticket', null);
         ArrayHelper::filter($arguments, ['passive', 'durable', 'auto_delete']);
 
         return $this->getAMQPChannel()->exchange_declare($exchange->getName(), $exchange->getExchangeType(), $passive, $durable, $autoDelete, $internal, $nowait, $arguments, $ticket);
@@ -170,6 +206,21 @@ class ConnectionFactory
         $this->connection->setUsername($username);
     }
 
+    /**
+     * @return mixed
+     */
+    public function getAckCallback()
+    {
+        return $this->ackCallback;
+    }
+
+    /**
+     * @param mixed $ackCallback
+     */
+    public function setAckCallback($ackCallback)
+    {
+        $this->ackCallback = $ackCallback;
+    }
     // getter setter
 
 }
