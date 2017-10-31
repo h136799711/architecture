@@ -14,7 +14,7 @@
  *********************************
  */
 
-namespace by\component\messageQueue\core\exchanges;
+namespace by\component\messageQueue\exchanges;
 
 
 use by\component\messageQueue\core\Exchange;

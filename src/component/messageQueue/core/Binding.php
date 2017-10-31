@@ -26,11 +26,13 @@ class Binding
     private $routingKey;
     private $nowait;
 
-    public function __construct(Queue $queue, ExchangeInterface $exchange, $routingKey = '')
+    public function __construct(Queue $queue, ExchangeInterface $exchange = null, $routingKey = '')
     {
         $this->setQueueName($queue->getName());
         $this->setRoutingKey($routingKey);
-        $this->setExchange($exchange->getName());
+        if ($exchange) {
+            $this->setExchange($exchange->getName());
+        }
         $this->setNowait(false);
     }
 

@@ -17,7 +17,7 @@
 namespace by\component\securityCode\entity;
 
 
-use by\base\BaseEntity;
+use by\infrastructure\base\BaseEntity;
 
 class SecurityCodeEntity extends BaseEntity
 {

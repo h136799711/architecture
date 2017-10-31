@@ -44,7 +44,11 @@ class BindBuilder
         return $builder;
     }
 
-    public function bind(ExchangeInterface $exchange)
+    /**
+     * @param ExchangeInterface $exchange
+     * @return BindBuilder
+     */
+    public function bind(ExchangeInterface $exchange = null)
     {
         $builder = self::getInstance();
         $builder->setExchange($exchange);

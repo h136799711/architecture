@@ -19,9 +19,8 @@ namespace by\component\messageQueue\factory;
 use by\component\messageQueue\core\Binding;
 use by\component\messageQueue\core\Channel;
 use by\component\messageQueue\core\Connection;
-use by\component\messageQueue\core\Consumer;
 use by\component\messageQueue\core\Queue;
-use by\component\messageQueue\interfaces\ConsumerMessageInterface;
+use by\component\messageQueue\interfaces\ConsumerInterface;
 use by\component\messageQueue\interfaces\ExchangeInterface;
 use by\component\messageQueue\interfaces\MessageInterface;
 use by\component\messageQueue\message\BaseMessage;
@@ -97,16 +96,12 @@ class ConnectionFactory
     }
 
 
-    public function consumer(Consumer $consumer)
+    public function consumer(ConsumerInterface $consumer)
     {
 
-        $callback = null;
+        $callback = array($consumer, 'onMessage');
 
-        if ($consumer instanceof ConsumerMessageInterface) {
-            $callback = array($consumer, 'onMessage');
-        }
-
-        $this->getAMQPChannel()->basic_consume($consumer->getQueueName(), '', false, true, false, false, $callback);
+        $this->getAMQPChannel()->basic_consume($consumer->getQueueName(), $consumer->getConsumerTag(), false, true, false, false, $callback);
 
         while (count($this->getAMQPChannel()->callbacks)) {
             $this->getAMQPChannel()->wait();
@@ -147,7 +142,11 @@ class ConnectionFactory
      */
     public function binding(Binding $binding)
     {
-        return $this->getAMQPChannel()->queue_bind($binding->getQueueName(), $binding->getExchange(), $binding->getRoutingKey(), $binding->getNowait());
+        if (!empty($binding->getExchange())
+            && !empty($binding->getRoutingKey())) {
+            return $this->getAMQPChannel()->queue_bind($binding->getQueueName(), $binding->getExchange(), $binding->getRoutingKey(), $binding->getNowait());
+        }
+        return null;
     }
 
     /**
@@ -167,6 +166,9 @@ class ConnectionFactory
      */
     public function declareExchange(ExchangeInterface $exchange)
     {
+        if ($exchange == null) {
+            return null;
+        }
         $arguments = $exchange->getArguments();
         $instance = ArrayHelper::getInstance()->from($arguments);
         $passive = $instance->getValueBy('passive', false);

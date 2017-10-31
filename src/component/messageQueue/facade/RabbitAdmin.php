@@ -18,9 +18,9 @@ namespace by\component\messageQueue\facade;
 
 
 use by\component\messageQueue\core\Binding;
-use by\component\messageQueue\core\Consumer;
 use by\component\messageQueue\core\Queue;
 use by\component\messageQueue\factory\ConnectionFactory;
+use by\component\messageQueue\interfaces\ConsumerInterface;
 use by\component\messageQueue\interfaces\ExchangeInterface;
 use by\component\messageQueue\message\BaseMessage;
 
@@ -61,8 +61,11 @@ class RabbitAdmin
      * @param  ExchangeInterface $exchange
      * @return RabbitAdmin
      */
-    public function declareExchange(ExchangeInterface $exchange)
+    public function declareExchange(ExchangeInterface $exchange = null)
     {
+        if (!$exchange) {
+            return $this;
+        }
         $this->setLastDeclareExchangeInfo($this->connectionFactory->declareExchange($exchange));
         return $this;
     }
@@ -80,10 +83,10 @@ class RabbitAdmin
 
     /**
      * 订阅
-     * @param Consumer $consumer
+     * @param ConsumerInterface $consumer
      * @return RabbitAdmin
      */
-    public function subscribeConsumer(Consumer $consumer)
+    public function subscribe($consumer)
     {
         $this->connectionFactory->consumer($consumer);
         return $this;

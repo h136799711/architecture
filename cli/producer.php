@@ -16,48 +16,37 @@
 
 namespace byCli;
 
-use by\component\messageQueue\builder\BindBuilder;
-use by\component\messageQueue\core\exchanges\DirectExchange;
 use by\component\messageQueue\core\Queue;
-use by\component\messageQueue\facade\RabbitAdmin;
-use by\component\messageQueue\factory\ConnectionFactory;
+use by\component\messageQueue\exchanges\DirectExchange;
 use by\component\messageQueue\message\JsonMessage;
+use by\component\messageQueue\producer\PrintProducer;
+use byCli\mq\DefaultMQConfig;
 
 require_once '../vendor/autoload.php';
 
-$host = '47.88.216.242';
-$username = 'hebidu';
-$password = '364945361';
-$vhost = 'qqav.club';
-
-$exchangeName = 'direct_exchange';
-$queueName = 'direct';
 $routingKey = 'qqav.club.test.topic.delete';
+
 // 定义路由交换机
-$exchange = new DirectExchange($exchangeName);
+$exchange = new DirectExchange('direct_exchange');
 // 定义队列
-$queue = new Queue($queueName);
+$queue = new Queue('direct');
 $queue->setPassive(false);
-// 队列-交换机-绑定关系定义
-$binding = BindBuilder::queue($queue)->bind($exchange)->with($routingKey)->build();
 
-// 总控初始化
-$admin = new RabbitAdmin(new ConnectionFactory($host, $username, $password, $vhost));
-// 创建交换机-队列-绑定关系
-$admin->declareExchange($exchange)->declareQueue($queue)->bind($binding);
+$producer = new PrintProducer(new DefaultMQConfig());
 
-var_dump($admin->getLastDeclareQueueInfo());
-var_dump($admin->getLastDeclareExchangeInfo());
+$producer->ready($queue, $exchange, $routingKey);
 
 // 创建消息
 $message = new JsonMessage();
 
-$cnt = 2;
+$cnt = 100000;
 while ($cnt--) {
     $body = json_encode(['username' => 'hebidu', 'nickname' => '何必都']);
     $total = strlen($body);
     $message->setBodySize($total);
-    $message->setBody($body);
-    $admin->publish($message, $binding);
+    $message->setBody($cnt . $body);
+    $producer->produce($message);
+    usleep(500);
+//    echo $cnt;
 }
 

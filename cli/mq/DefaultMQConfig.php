@@ -7,23 +7,25 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  * Revision History Version
  ********1.0.0********************
- * file created @ 2017-10-27 14:30
+ * file created @ 2017-10-31 10:53
  *********************************
  ********1.0.1********************
  *
  *********************************
  */
 
-namespace by\component\messageQueue\core\consumer;
+namespace byCli\mq;
 
 
-use by\component\messageQueue\core\Consumer;
-use by\component\messageQueue\interfaces\ConsumerMessageInterface;
+use by\component\messageQueue\config\MQConfig;
 
-class PrintConsumer extends Consumer implements ConsumerMessageInterface
+class DefaultMQConfig extends MQConfig
 {
-    public function onMessage($msg)
+
+    // construct
+    public function __construct()
     {
-        echo json_encode($msg), "\n";
+        parent::__construct('47.88.216.242', 'hebidu', '364945361', 'qqav.club');
     }
+
 }

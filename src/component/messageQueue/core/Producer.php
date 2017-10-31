@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  * Revision History Version
  ********1.0.0********************
- * file created @ 2017-10-27 14:18
+ * file created @ 2017-10-31 10:17
  *********************************
  ********1.0.1********************
  *
@@ -16,48 +16,38 @@
 
 namespace by\component\messageQueue\core;
 
+use by\component\messageQueue\message\BaseMessage;
 
-use by\infrastructure\helper\StringHelper;
 
 /**
- * Class Consumer
- * 消费着抽象类
+ * Class Producer
+ * 生产者
  * @package by\component\messageQueue\core
  */
-abstract class Consumer
+abstract class Producer
 {
-
-
-    private $name;
-
     /**
-     * Consumer constructor.
-     * @param string $name 消费者标识名称，可不传，默认生成随机字符串 cms_ 前缀
-     */
-    function __construct($name = '')
-    {
-        if (empty($name)) {
-            $name = 'csm_' . StringHelper::md5UniqueId();
-        }
-        $this->setName($name);
-
-    }
-
-    /**
+     * 生产者名称
      * @return mixed
      */
-    public function getName()
-    {
-        return $this->name;
-    }
+    abstract function getName();
 
     /**
-     * @param mixed $name
+     * 生产者->生产线-》队列
+     * @return mixed
      */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
+    //abstract function getQueue();
 
+    /**
+     * 生产后的产品送往该交换机处
+     * @return mixed
+     */
+    //abstract function getExchange();
 
+    /**
+     * 生产产品
+     * @param BaseMessage $message
+     * @return mixed
+     */
+    abstract function produce(BaseMessage $message);
 }
