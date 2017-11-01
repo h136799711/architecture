@@ -21,6 +21,13 @@ use by\component\messageQueue\core\Queue;
 use byCli\mq\DefaultMQConfig;
 
 require_once '../vendor/autoload.php';
+function sign_handler($signo)
+{
+    echo "haha/n";
+}
+
+declare(ticks=1);
+pcntl_signal(SIGINT, "sign_handler");
 
 $config = new DefaultMQConfig();
 $consumer = new PrintConsumer($config);
