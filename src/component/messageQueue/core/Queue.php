@@ -31,6 +31,13 @@ class Queue
     private $passive;
     private $nowait;
     private $autoDelete;
+    private $ttl;
+    private $deadLetterExchange;
+    private $deadLetterRoutingKey;
+
+    /**
+     * @var
+     */
     private $arguments;
 
     /**
@@ -45,7 +52,58 @@ class Queue
         $this->setExclusive(false);
         $this->setNowait(false);
         $this->setPassive(false);
-        $this->setArguments(null);
+        $this->setArguments([]);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeadLetterExchange()
+    {
+        return $this->deadLetterExchange;
+    }
+
+    /**
+     * @param mixed $deadLetterExchange
+     */
+    public function setDeadLetterExchange($deadLetterExchange)
+    {
+        $this->deadLetterExchange = $deadLetterExchange;
+        $this->arguments['x-dead-letter-exchange'] = $deadLetterExchange;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeadLetterRoutingKey()
+    {
+        return $this->deadLetterRoutingKey;
+    }
+
+    /**
+     * @param mixed $deadLetterRoutingKey
+     */
+    public function setDeadLetterRoutingKey($deadLetterRoutingKey)
+    {
+        $this->deadLetterRoutingKey = $deadLetterRoutingKey;
+        $this->arguments['x-dead-letter-routing-key'] = $deadLetterRoutingKey;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTtl()
+    {
+        return $this->ttl;
+    }
+
+    /**
+     * @param mixed $ttl
+     */
+    public function setTtl($ttl)
+    {
+        $this->ttl = $ttl;
+        $this->arguments['x-message-ttl'] = $ttl;
     }
 
     /**

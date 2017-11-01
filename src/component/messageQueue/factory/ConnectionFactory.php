@@ -26,6 +26,7 @@ use by\component\messageQueue\interfaces\MessageInterface;
 use by\component\messageQueue\message\BaseMessage;
 use by\infrastructure\helper\ArrayHelper;
 use PhpAmqpLib\Message\AMQPMessage;
+use PhpAmqpLib\Wire\AMQPTable;
 
 class ConnectionFactory
 {
@@ -100,22 +101,14 @@ class ConnectionFactory
     {
 
         $callback = array($consumer, 'onMessage');
-
+        // 只有consumer已经处理并确认了上一条message时queue才分派新的message给它
+        $this->getAMQPChannel()->basic_qos(null, 1, null);
         $this->getAMQPChannel()->basic_consume($consumer->getQueueName(), $consumer->getConsumerTag(), false, true, false, false, $callback);
 
         while (count($this->getAMQPChannel()->callbacks)) {
             $this->getAMQPChannel()->wait();
         }
-    }
 
-    public function basicConsumer(Queue $queue, $callback = null)
-    {
-
-        $this->getAMQPChannel()->basic_consume($queue->getName(), '', false, true, false, false, $callback);
-
-        while (count($this->getAMQPChannel()->callbacks)) {
-            $this->getAMQPChannel()->wait();
-        }
     }
 
     public function basicSend(BaseMessage $message, Binding $binding)
@@ -128,9 +121,15 @@ class ConnectionFactory
         $msg->setBody($message->getBody());
         $mandatory = false;
         $immediate = false;
+
         if ($message instanceof MessageInterface) {
             $mandatory = $message->getMandatory();
             $immediate = $message->getImmeadiate();
+        }
+
+        if ($message->getExpiration() > 0) {
+            $msg->set('expiration', $message->getExpiration());
+            $msg->set('delivery_mode', AMQPMessage::DELIVERY_MODE_PERSISTENT);
         }
         $this->getAMQPChannel()->basic_publish($msg, $binding->getExchange(), $binding->getRoutingKey(), $mandatory, $immediate);
     }
@@ -156,8 +155,11 @@ class ConnectionFactory
      */
     public function declareQueue(Queue $queue)
     {
-        return $this->getAMQPChannel()->queue_declare($queue->getName(), $queue->getPassive(), $queue->getDurable(), $queue->getExclusive(), $queue->getAutoDelete(), $queue->getNowait(), $queue->getArguments());
+
+        $arguments = $this->getAMQPTable($queue->getArguments());
+        return $this->getAMQPChannel()->queue_declare($queue->getName(), $queue->getPassive(), $queue->getDurable(), $queue->getExclusive(), $queue->getAutoDelete(), $queue->getNowait(), $arguments);
     }
+
 
     /**
      * 声明一个交换机
@@ -180,6 +182,15 @@ class ConnectionFactory
         ArrayHelper::filter($arguments, ['passive', 'durable', 'auto_delete']);
 
         return $this->getAMQPChannel()->exchange_declare($exchange->getName(), $exchange->getExchangeType(), $passive, $durable, $autoDelete, $internal, $nowait, $arguments, $ticket);
+    }
+
+    private function getAMQPTable($args)
+    {
+        if (empty($args)) return null;
+        $table = new AMQPTable();
+        foreach ($args as $key => $vo) {
+            $table->set($key, $vo);
+        }
     }
 
     // construct

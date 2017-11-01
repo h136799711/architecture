@@ -17,6 +17,7 @@
 namespace by\component\messageQueue\core;
 
 
+use by\component\messageQueue\interfaces\ExchangeInterface;
 use by\infrastructure\helper\StringHelper;
 
 /**
@@ -27,6 +28,9 @@ use by\infrastructure\helper\StringHelper;
 abstract class Consumer
 {
 
+    abstract function ready(Queue $queue, ExchangeInterface $exchange = null, $routingKey = '');
+
+    abstract function close();
 
     private $name;
 

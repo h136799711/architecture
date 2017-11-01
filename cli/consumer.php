@@ -23,13 +23,18 @@ use byCli\mq\DefaultMQConfig;
 require_once '../vendor/autoload.php';
 
 $config = new DefaultMQConfig();
-$queueName = 'direct';
-//$routingKey = 'qqav.club.test.topic.create';
-$queue = new Queue($queueName);
-$queue->setPassive(false);
 $consumer = new PrintConsumer($config);
-$consumer->ready($queue);
-$consumer->subscribe();
+try {
+    $queueName = 'dead_direct_queue';
+    $queue = new Queue($queueName);
+    $queue->setDurable(false);
+    $queue->setPassive(false);
+    $consumer->ready($queue);
+    $consumer->subscribe();
+} catch (\Exception $exception) {
 
+} finally {
+    $consumer->close();
+}
 
 

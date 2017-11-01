@@ -16,6 +16,7 @@
 
 namespace by\component\messageQueue\core;
 
+use by\component\messageQueue\interfaces\ExchangeInterface;
 use by\component\messageQueue\message\BaseMessage;
 
 
@@ -31,6 +32,10 @@ abstract class Producer
      * @return mixed
      */
     abstract function getName();
+
+    abstract function ready(Queue $queue, ExchangeInterface $exchange = null, $routingKey = '');
+
+    abstract function close();
 
     /**
      * 生产者->生产线-》队列

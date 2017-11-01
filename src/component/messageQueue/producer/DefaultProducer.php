@@ -28,7 +28,7 @@ use by\component\messageQueue\interfaces\ExchangeInterface;
 use by\component\messageQueue\message\BaseMessage;
 use by\infrastructure\helper\StringHelper;
 
-class PrintProducer extends Producer
+class DefaultProducer extends Producer
 {
 
     private $name;
@@ -56,6 +56,13 @@ class PrintProducer extends Producer
         $this->admin->publish($message, $this->binding);
     }
 
+    public function close()
+    {
+        if ($this->admin) {
+            $this->admin->close();
+        }
+    }
+
     public function ready(Queue $queue, ExchangeInterface $exchange = null, $routingKey = '')
     {
         // 队列-交换机-绑定关系定义
@@ -64,7 +71,7 @@ class PrintProducer extends Producer
     }
 
     /**
-     * @return mixed
+     * @return RabbitAdmin
      */
     public function getAdmin()
     {

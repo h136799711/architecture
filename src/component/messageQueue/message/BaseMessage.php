@@ -30,6 +30,11 @@ abstract class BaseMessage implements MessageInterface
     abstract function convert();
 
     /**
+     * @var integer 消息过期时间
+     */
+    private $expiration;
+
+    /**
      * TODO 未明白有什么作用
      * @var boolean
      */
@@ -39,11 +44,13 @@ abstract class BaseMessage implements MessageInterface
      * @var integer
      */
     private $bodySize;
+
     /**
      * 消息主体
      * @var string
      */
     private $body;
+
     /**
      * 是否强制
      * @var  boolean
@@ -62,6 +69,23 @@ abstract class BaseMessage implements MessageInterface
         $this->setTruncated(false);
         $this->setImmeadiate(false);
         $this->setMandatory(false);
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getExpiration()
+    {
+        return $this->expiration;
+    }
+
+    /**
+     * @param int $expiration
+     */
+    public function setExpiration($expiration)
+    {
+        $this->expiration = $expiration;
     }
 
     /**

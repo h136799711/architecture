@@ -37,7 +37,6 @@ class RabbitAdmin
     public function __destruct()
     {
         $this->connectionFactory->close();
-
     }
 
     public function __construct(ConnectionFactory $factory)
@@ -89,18 +88,6 @@ class RabbitAdmin
     public function subscribe($consumer)
     {
         $this->connectionFactory->consumer($consumer);
-        return $this;
-    }
-
-    /**
-     * 订阅
-     * @param Queue $queue
-     * @param null $callback
-     * @return RabbitAdmin
-     */
-    public function subscribeQueue(Queue $queue, $callback = null)
-    {
-        $this->connectionFactory->basicConsumer($queue, $callback);
         return $this;
     }
 

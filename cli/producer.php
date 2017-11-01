@@ -16,37 +16,49 @@
 
 namespace byCli;
 
+use by\component\messageQueue\builder\BindBuilder;
 use by\component\messageQueue\core\Queue;
 use by\component\messageQueue\exchanges\DirectExchange;
 use by\component\messageQueue\message\JsonMessage;
-use by\component\messageQueue\producer\PrintProducer;
+use by\component\messageQueue\producer\DefaultProducer;
 use byCli\mq\DefaultMQConfig;
 
 require_once '../vendor/autoload.php';
 
 $routingKey = 'qqav.club.test.topic.delete';
 
+$deadLetterExchange = new DirectExchange('dead_exchange');
+
 // 定义路由交换机
 $exchange = new DirectExchange('direct_exchange');
 // 定义队列
-$queue = new Queue('direct');
+$queue = new Queue('ttl_direct_queue');
 $queue->setPassive(false);
+$queue->setTtl(3000);
+$queue->setDeadLetterExchange($deadLetterExchange->getName());
+$queue->setDeadLetterRoutingKey('dead_letter');
 
-$producer = new PrintProducer(new DefaultMQConfig());
-
+var_dump($queue->getArguments());
+$producer = new DefaultProducer(new DefaultMQConfig());
 $producer->ready($queue, $exchange, $routingKey);
+
+$queue = new Queue('dead_direct_queue');
+//
+$producer->getAdmin()->declareExchange($deadLetterExchange)->declareQueue($queue)->bind(BindBuilder::queue($queue)->bind($deadLetterExchange)->with($routingKey)->build());
 
 // 创建消息
 $message = new JsonMessage();
 
-$cnt = 100000;
+$cnt = 50;
 while ($cnt--) {
     $body = json_encode(['username' => 'hebidu', 'nickname' => '何必都']);
     $total = strlen($body);
     $message->setBodySize($total);
     $message->setBody($cnt . $body);
+    $message->setExpiration("3000");
     $producer->produce($message);
     usleep(500);
 //    echo $cnt;
 }
+$producer->close();
 
