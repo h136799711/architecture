@@ -14,7 +14,7 @@
  *********************************
  */
 
-namespace by\interfaces;
+namespace by\infrastructure\interfaces;
 
 /**
  * 转化为json字符串的接口

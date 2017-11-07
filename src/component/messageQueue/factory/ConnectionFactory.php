@@ -101,10 +101,26 @@ class ConnectionFactory
     {
 
         $callback = array($consumer, 'onMessage');
+        $onAck = $consumer->isNoAck();
+
         // 只有consumer已经处理并确认了上一条message时queue才分派新的message给它
         $this->getAMQPChannel()->basic_qos(null, 1, null);
-        $this->getAMQPChannel()->basic_consume($consumer->getQueueName(), $consumer->getConsumerTag(), false, true, false, false, $callback);
 
+        $this->getAMQPChannel()->basic_consume($consumer->getQueueName(), $consumer->getConsumerTag(), false, $onAck, false, false, $callback);
+
+        $pcntlEnable = false;
+        if (function_exists('pcntl_signal')) {
+            $pcntlEnable = true;
+        }
+
+        $closeConnection = function ($msg) use ($consumer) {
+            $consumer->close();
+            exit(0);
+        };
+        if ($pcntlEnable) {
+            declare(ticks=1);
+            pcntl_signal(SIGTERM, $closeConnection);
+        }
         while (count($this->getAMQPChannel()->callbacks)) {
             $this->getAMQPChannel()->wait();
         }
@@ -191,6 +207,7 @@ class ConnectionFactory
         foreach ($args as $key => $vo) {
             $table->set($key, $vo);
         }
+        return $table;
     }
 
     // construct

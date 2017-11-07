@@ -30,7 +30,8 @@ abstract class BaseMessage implements MessageInterface
     abstract function convert();
 
     /**
-     * @var integer 消息过期时间
+     * 消息过期时间
+     * @var  integer
      */
     private $expiration;
 

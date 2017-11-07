@@ -27,4 +27,18 @@ class SimpleMessage extends BaseMessage
 
     // member function
 
+    function convert()
+    {
+        // TODO: Implement convert() method.
+    }
+
+    function getMandatory()
+    {
+        // TODO: Implement getMandatory() method.
+    }
+
+    function getImmeadiate()
+    {
+        // TODO: Implement getImmeadiate() method.
+    }
 }

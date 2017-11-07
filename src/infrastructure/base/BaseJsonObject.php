@@ -18,7 +18,7 @@ namespace by\infrastructure\base;
 
 
 use by\infrastructure\helper\Object2DataArrayHelper;
-use by\interfaces\ToJsonStringInterfaces;
+use by\infrastructure\interfaces\ToJsonStringInterfaces;
 
 class BaseJsonObject extends BaseObject implements ToJsonStringInterfaces
 {

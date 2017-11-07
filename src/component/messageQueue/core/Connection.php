@@ -55,7 +55,16 @@ class Connection
 
     public function create()
     {
-        $this->connection = new AMQPStreamConnection($this->getHost(), $this->getPort(), $this->getUsername(), $this->getPassword(), $this->getVhost());
+        $insist = false;
+        $login_method = 'AMQPLAIN';
+        $login_response = null;
+        $locale = 'en_US';
+        $connection_timeout = 3.0;
+        $read_write_timeout = 3.0;
+        $context = null;
+        $keepAlive = false;
+        $heartbeat = 60; //默认心跳时间
+        $this->connection = new AMQPStreamConnection($this->getHost(), $this->getPort(), $this->getUsername(), $this->getPassword(), $this->getVhost(), $insist, $login_method, $login_response, $locale, $connection_timeout, $read_write_timeout, $context, $keepAlive, $heartbeat);
     }
 
 

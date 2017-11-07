@@ -110,7 +110,7 @@ class Object2DataArrayHelper
         if (!empty($data) && is_array($data)) {
             $className = get_class($instance);
             $ref = new \ReflectionClass($className);
-            $properties = $ref->getProperties();
+            $properties = self::getAllProperties($instance);//$ref->getProperties();
             foreach ($properties as $obj) {
                 $name = $obj->name;
                 $key = self::uncamelize($name);

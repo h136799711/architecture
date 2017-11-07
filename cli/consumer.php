@@ -16,26 +16,26 @@
 
 namespace byCli;
 
+use by\component\messageQueue\builder\BindBuilder;
 use by\component\messageQueue\consumer\PrintConsumer;
 use by\component\messageQueue\core\Queue;
+use by\component\messageQueue\exchanges\DirectExchange;
 use byCli\mq\DefaultMQConfig;
 
 require_once '../vendor/autoload.php';
-function sign_handler($signo)
-{
-    echo "haha/n";
-}
-
-declare(ticks=1);
-pcntl_signal(SIGINT, "sign_handler");
 
 $config = new DefaultMQConfig();
 $consumer = new PrintConsumer($config);
 try {
+    // 定义路由交换机
+    $routingKey = 'dead_letter';
+    $exchange = new DirectExchange('dead.exchange');
     $queueName = 'dead_direct_queue';
     $queue = new Queue($queueName);
-    $queue->setDurable(false);
+    $queue->setDurable(true);
     $queue->setPassive(false);
+
+    $consumer->getAdmin()->declareExchange($exchange)->declareQueue($queue)->bind(BindBuilder::queue($queue)->bind($exchange)->with($routingKey)->build());
     $consumer->ready($queue);
     $consumer->subscribe();
 } catch (\Exception $exception) {

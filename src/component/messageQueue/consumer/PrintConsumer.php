@@ -21,10 +21,12 @@ class PrintConsumer extends DefaultConsumer
 {
     private static $cnt = 0;
 
-    function onMessage($msg)
+    public function onMessage($msg)
     {
-        self::$cnt++;
         echo self::$cnt . ",";
+        echo serialize($msg);
+        self::$cnt++;
+        parent::onMessage($msg);
     }
 
 }

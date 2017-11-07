@@ -21,6 +21,9 @@ interface ConsumerInterface
 {
     public function getQueueName();
 
+    public function isNoAck();
     public function getConsumerTag();
     public function onMessage($msg);
+
+    public function close();
 }
