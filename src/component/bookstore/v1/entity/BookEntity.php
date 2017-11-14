@@ -14,7 +14,7 @@
  *********************************
  */
 
-namespace by\component\bookstore\v1;
+namespace by\component\bookstore\v1\entity;
 
 
 use by\infrastructure\base\BaseEntity;
