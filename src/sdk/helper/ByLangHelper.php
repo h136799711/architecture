@@ -28,6 +28,7 @@ class ByLangHelper
     {
         self::range($lang);
         // TODO: 载入多种语言，用于在当前语言中 使用它种语言
+        // TODO: 目前只能使用当前sdk路径的语言包，不能进行扩展
         self::load(BY_SDK_PATH . BY_DS . 'lang' . BY_DS . $lang . BY_EXT);
     }
 
