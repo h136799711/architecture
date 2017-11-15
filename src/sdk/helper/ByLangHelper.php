@@ -8,7 +8,11 @@
 
 namespace by\sdk\helper;
 
-
+/**
+ * Class ByLangHelper
+ * sdk的语言管理帮助类
+ * @package by\sdk\helper
+ */
 class ByLangHelper
 {
     // 语言数据
@@ -23,8 +27,8 @@ class ByLangHelper
     public static function setLang($lang = 'zh-cn')
     {
         self::range($lang);
+        // TODO: 载入多种语言，用于在当前语言中 使用它种语言
         self::load(BY_SDK_PATH . BY_DS . 'lang' . BY_DS . $lang . BY_EXT);
-
     }
 
     // 设定当前的语言

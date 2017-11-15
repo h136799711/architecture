@@ -12,6 +12,11 @@ use by\sdk\helper\ByConfigHelper;
 use by\sdk\helper\ByCurlHelper;
 use by\sdk\helper\ByLangHelper;
 
+/**
+ * Class ByBaseRequest
+ * 抽象基础请求类
+ * @package by\sdk\base
+ */
 abstract class ByBaseRequest
 {
     private static $config;

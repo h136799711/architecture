@@ -14,6 +14,11 @@ use by\sdk\encrypt\algorithm\AlgParams;
 use by\sdk\exception\ByInvalidParamException;
 use by\sdk\exception\ByLackParamException;
 
+/**
+ * Class ByCurlHelper
+ * sdk的请求管理帮助类
+ * @package by\sdk\helper
+ */
 class ByCurlHelper
 {
     private static $helper = false;// 接口网关地址

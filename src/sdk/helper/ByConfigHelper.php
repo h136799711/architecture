@@ -8,7 +8,11 @@
 
 namespace by\sdk\helper;
 
-
+/**
+ * Class ByConfigHelper
+ * sdk的配置管理帮助类
+ * @package by\sdk\helper
+ */
 class ByConfigHelper
 {
 
@@ -18,7 +22,7 @@ class ByConfigHelper
     public function __construct($config = [])
     {
         if (empty(self::$config)) {
-            self::$config = include(dirname(__DIR__) . '/config/config.php');
+            self::$config = include(BY_SDK_PATH . '/config/config.php');
         }
         // 可定制配置信息
         if (!empty($config)) {

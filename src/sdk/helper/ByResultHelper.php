@@ -8,6 +8,7 @@
 
 namespace by\sdk\helper;
 
+use by\infrastructure\helper\CallResultHelper;
 use by\sdk\constants\ByRetCode;
 
 /**
@@ -20,24 +21,26 @@ class ByResultHelper
     /**
      * 操作成功 code = 0
      * @param $data
-     * @param string $info
-     * @return array ['code','msg','data']
+     * @param string $message
+     * @internal param string $info
+     * @return \by\infrastructure\base\CallResult
      */
-    public static function success($data, $info = '')
+    public static function success($data, $message = '')
     {
-        return ['code' => 0, 'msg' => $info, 'data' => $data];
+        return CallResultHelper::success($data, $message);
     }
 
     /**
      *
      * 操作失败 code != 0
      * 具体code 值参考 ByRetCode
-     * @param string $info
+     * @param string $message
      * @param int $code
-     * @return array ['code','msg','data']
+     * @param array $data
+     * @return \by\infrastructure\base\CallResult
      */
-    public static function fail($info = '', $code = ByRetCode::FAILED)
+    public static function fail($message = '', $code = ByRetCode::FAILED, $data = [])
     {
-        return ['code' => $code, 'msg' => $info, 'data' => []];
+        return CallResultHelper::fail($data, $message, $code);
     }
 }
