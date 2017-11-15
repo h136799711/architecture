@@ -9,6 +9,7 @@
 namespace by\sdk\helper;
 
 
+use by\sdk\base\ByBaseReq;
 use by\sdk\encrypt\algorithm\AlgFactory;
 use by\sdk\encrypt\algorithm\AlgParams;
 use by\sdk\exception\ByInvalidParamException;
@@ -21,7 +22,6 @@ use by\sdk\exception\ByLackParamException;
  */
 class ByCurlHelper
 {
-    private static $helper = false;// 接口网关地址
     private $gatewayUri;
     private $client_id;
     private $client_secret;// 通信算法
@@ -49,47 +49,37 @@ class ByCurlHelper
     }
 
     /**
-     *
-     * @param $data
+     * 发送请求
+     * @param ByBaseReq $baseReq
      * @param string $api_url
-     * @return array
+     * @return array|\by\infrastructure\base\CallResult
+     * @internal param $data
      * @internal param $url
      * @internal param bool $is_debug
      */
-    public function callRemote($data, $api_url = '')
+    public function callRemote(ByBaseReq $baseReq, $api_url = '')
     {
         if (empty($api_url)) {
             $api_url = $this->gatewayUri;
         }
-        $now = time();
-        if (!isset($data['type']) || empty($data['type'])) {
+        if (empty($baseReq->getType())) {
             return ByResultHelper::fail(ByLangHelper::get('by_param_need', ['param' => 'type']));
         }
 
-        if (!isset($data['api_ver']) || empty($data['api_ver'])) {
+        if (empty($baseReq->getApiVer())) {
             return ByResultHelper::fail(ByLangHelper::get('by_param_need', ['param' => 'api_ver']));
         }
 
-        $type = $data['type'];
-        unset($data['type']);
-        $apiVer = $data['api_ver'];
-        unset($data['api_ver']);
-        if (!isset($data['notify_id']) || empty($data['notify_id'])) {
-            $notify_id = $now;
-        } else {
-            $notify_id = $data['notify_id'];
-            unset($data['notify_id']);
-        }
-
-        $encrypt_data = $this->algInstance->encryptData($data);
+        $encrypt_data = $this->algInstance->encryptData($baseReq->getData());
         $algParams = new AlgParams();
+        // TODO: Client_id 从$baseReq中取得
         $algParams->setClientId($this->client_id);
         $algParams->setClientSecret($this->client_secret);
         $algParams->setData($encrypt_data);
-        $algParams->setNotifyId($notify_id);
-        $algParams->setTime(strval($now));
-        $algParams->setType($type);
-        $algParams->setApiVer($apiVer);
+        $algParams->setNotifyId($baseReq->getNotifyId());
+        $algParams->setTime(strval($baseReq->getTime()));
+        $algParams->setType($baseReq->getType());
+        $algParams->setApiVer($baseReq->getApiVer());
 
         $itboye = $this->algInstance->encryptTransmissionData($algParams->getResponseParams(), $this->client_secret);
         $param = [
