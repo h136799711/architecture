@@ -23,6 +23,10 @@ class CallResult extends BaseCallResult
 {
 
     // member function
+    public function isSuccess()
+    {
+        return $this->getCode() == 0;
+    }
 
     // construct
     public function __construct($data = '', $msg = '', $code = 0)
