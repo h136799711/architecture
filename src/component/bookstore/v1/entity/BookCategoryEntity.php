@@ -7,7 +7,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  * Revision History Version
  ********1.0.0********************
- * file created @ 2017-11-09 10:52
+ * file created @ 2017-11-17 11:19
  *********************************
  ********1.0.1********************
  *
@@ -16,16 +16,30 @@
 
 namespace by\component\bookstore\v1\entity;
 
-
-use by\infrastructure\base\BaseEntity;
-
-class ChapterEntity extends BaseEntity
+/**
+ * Class BookCategoryEntity
+ * 书籍分类对象
+ * @package by\component\bookstore\v1\entity
+ */
+class BookCategoryEntity
 {
+    private $cateName;
 
-    // construct
-    public function __construct()
+    /**
+     * 分类名称
+     * @return string
+     */
+    public function getCateName()
     {
-        // TODO construct
+        return $this->cateName;
     }
 
+    /**
+     * 设置分类名称
+     * @param string $cateName
+     */
+    public function setCateName($cateName)
+    {
+        $this->cateName = $cateName;
+    }
 }

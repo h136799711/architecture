@@ -26,16 +26,44 @@ use by\infrastructure\base\BaseEntity;
  */
 class BookEntity extends BaseEntity
 {
+    /**
+     * 书籍完本
+     */
+    const STATE_END = 1;
+
+    /**
+     * 书籍连载中
+     */
+    const STATE_Serialize = 0;
+
     private $title;
     private $authorId;
     private $authorName;
     private $desc;
     private $thumbnail;
-    private $serialized;
+    private $state;
+    private $cateId;
 
     public function __construct()
     {
-        // TODO construct
+    }
+
+    /**
+     * 获取分类id
+     * @return mixed
+     */
+    public function getCateId()
+    {
+        return $this->cateId;
+    }
+
+    /**
+     * 设置分类id
+     * @param integer $cateId
+     */
+    public function setCateId($cateId)
+    {
+        $this->cateId = $cateId;
     }
 
     /**
@@ -121,19 +149,17 @@ class BookEntity extends BaseEntity
     /**
      * @return mixed
      */
-    public function getSerialized()
+    public function getState()
     {
-        return $this->serialized;
+        return $this->state;
     }
 
-    // construct
-
     /**
-     * @param mixed $serialized
+     * @param mixed $state
      */
-    public function setSerialized($serialized)
+    public function setState($state)
     {
-        $this->serialized = $serialized;
+        $this->state = $state;
     }
 
 }
