@@ -36,6 +36,11 @@ class BookEntity extends BaseEntity
      */
     const STATE_Serialize = 0;
 
+    /**
+     * 未知
+     */
+    const STATE_Unknown = -1;
+
     private $title;
     private $authorId;
     private $authorName;
