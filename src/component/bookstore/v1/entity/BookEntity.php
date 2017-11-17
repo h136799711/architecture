@@ -44,7 +44,7 @@ class BookEntity extends BaseEntity
     private $title;
     private $authorId;
     private $authorName;
-    private $desc;
+    private $summary;
     private $thumbnail;
     private $state;
     private $cateId;
@@ -122,17 +122,17 @@ class BookEntity extends BaseEntity
     /**
      * @return mixed
      */
-    public function getDesc()
+    public function getSummary()
     {
-        return $this->desc;
+        return $this->summary;
     }
 
     /**
-     * @param mixed $desc
+     * @param mixed $summary
      */
-    public function setDesc($desc)
+    public function setSummary($summary)
     {
-        $this->desc = $desc;
+        $this->summary = $summary;
     }
 
     /**
