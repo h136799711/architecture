@@ -27,8 +27,27 @@ use by\infrastructure\base\BaseEntity;
 class BookSourceEntity extends BaseEntity
 {
     private $bookId;
+    private $bookAddress;
     private $bookSourceAddress;
     private $bookSourceName;
+
+    /**
+     * 书地址
+     * @return mixed
+     */
+    public function getBookAddress()
+    {
+        return $this->bookAddress;
+    }
+
+    /**
+     * 设置书地址
+     * @param mixed $bookAddress
+     */
+    public function setBookAddress($bookAddress)
+    {
+        $this->bookAddress = $bookAddress;
+    }
 
     /**
      * @return mixed
