@@ -16,12 +16,14 @@
 
 namespace by\component\bookstore\v1\entity;
 
+use by\infrastructure\base\BaseEntity;
+
 /**
  * Class BookCategoryEntity
  * 书籍分类对象
  * @package by\component\bookstore\v1\entity
  */
-class BookCategoryEntity
+class BookCategoryEntity extends BaseEntity
 {
     private $cateName;
 
