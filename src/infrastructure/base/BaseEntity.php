@@ -33,8 +33,9 @@ class BaseEntity extends BaseObject
 
     public function __construct()
     {
-        // TODO construct
-    } // 更新时间
+        $this->setCreateTime(time());
+        $this->setUpdateTime(time());
+    }
 
     // getter setter
 
