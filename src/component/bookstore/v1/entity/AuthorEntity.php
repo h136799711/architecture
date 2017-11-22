@@ -34,7 +34,7 @@ class AuthorEntity extends BaseEntity
 
     public function __construct()
     {
-        // TODO construct
+        parent::__construct();
     }
 
     /**
