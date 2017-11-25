@@ -16,10 +16,10 @@
 
 namespace byCli;
 
-use by\component\messageQueue\core\Queue;
-use by\component\messageQueue\exchanges\DirectExchange;
-use by\component\messageQueue\message\JsonMessage;
-use by\component\messageQueue\producer\DefaultProducer;
+use by\component\mq\core\Queue;
+use by\component\mq\exchanges\DirectExchange;
+use by\component\mq\message\JsonMessage;
+use by\component\mq\producer\DefaultProducer;
 use byCli\mq\DefaultMQConfig;
 
 require_once '../vendor/autoload.php';

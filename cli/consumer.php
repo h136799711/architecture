@@ -16,10 +16,10 @@
 
 namespace byCli;
 
-use by\component\messageQueue\builder\BindBuilder;
-use by\component\messageQueue\consumer\PrintConsumer;
-use by\component\messageQueue\core\Queue;
-use by\component\messageQueue\exchanges\DirectExchange;
+use by\component\mq\builder\BindBuilder;
+use by\component\mq\consumer\PrintConsumer;
+use by\component\mq\core\Queue;
+use by\component\mq\exchanges\DirectExchange;
 use byCli\mq\DefaultMQConfig;
 
 require_once '../vendor/autoload.php';

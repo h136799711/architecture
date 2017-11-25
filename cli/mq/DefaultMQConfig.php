@@ -17,7 +17,7 @@
 namespace byCli\mq;
 
 
-use by\component\messageQueue\config\MQConfig;
+use by\component\mq\config\MQConfig;
 
 class DefaultMQConfig extends MQConfig
 {
