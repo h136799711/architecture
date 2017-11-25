@@ -30,6 +30,7 @@ class BaseJsonObjectTest extends TestCase
     // member variables
     private $toUpper;
     private $toLower;
+    private $null;
 
     /**
      * @covers BaseJsonObject
@@ -40,11 +41,12 @@ class BaseJsonObjectTest extends TestCase
     public function testJsonObject()
     {
         $test = new BaseJsonObjectTest();
-        Object2DataArrayHelper::setData($test, ['id' => '11', 'to_lower' => 'lower', 'to_upper' => 'upper']);
+        Object2DataArrayHelper::setData($test, ['id' => '11', 'to_lower' => 'lower', 'to_upper' => 'upper', 'null' => null]);
         $array = Object2DataArrayHelper::getDataArrayFrom($test, ['id', 'to_upper']);
         $this->assertArrayHasKey('to_upper', $array);
         $this->assertArrayHasKey('id', $array);
         $array = Object2DataArrayHelper::getDataArrayFrom($test);
+        $this->assertArrayNotHasKey('null', $array);
         $this->assertArrayHasKey('id', $array);
         $this->assertArrayHasKey('to_upper', $array);
         $this->assertArrayNotHasKey('toUpper', $array);
@@ -56,9 +58,29 @@ class BaseJsonObjectTest extends TestCase
 
         $this->assertEquals('upper', $array['to_upper']);
         $this->assertEquals('11', $array['id']);
+        $array = Object2DataArrayHelper::getDataArrayFrom($test, [], false);
+        $this->assertArrayHasKey('null', $array);
+        $this->assertNull($array['null']);
+        $this->assertArrayHasKey('id', $array);
+        $this->assertArrayHasKey('to_upper', $array);
+        $this->assertArrayNotHasKey('toUpper', $array);
     }
 
-    // getter setter
+    /**
+     * @return mixed
+     */
+    public function getNull()
+    {
+        return $this->null;
+    }
+
+    /**
+     * @param mixed $null
+     */
+    public function setNull($null)
+    {
+        $this->null = $null;
+    }
 
     /**
      * @return mixed
