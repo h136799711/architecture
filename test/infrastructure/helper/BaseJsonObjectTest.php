@@ -43,6 +43,7 @@ class BaseJsonObjectTest extends TestCase
         $test = new BaseJsonObjectTest();
         Object2DataArrayHelper::setData($test, ['id' => '11', 'to_lower' => 'lower', 'to_upper' => 'upper', 'null' => null]);
         $array = Object2DataArrayHelper::getDataArrayFrom($test, ['id', 'to_upper']);
+        $this->assertArrayNotHasKey('to_lower', $array);
         $this->assertArrayHasKey('to_upper', $array);
         $this->assertArrayHasKey('id', $array);
         $array = Object2DataArrayHelper::getDataArrayFrom($test);
