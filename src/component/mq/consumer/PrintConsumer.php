@@ -17,15 +17,19 @@
 namespace by\component\mq\consumer;
 
 
+use PhpAmqpLib\Message\AMQPMessage;
+
 class PrintConsumer extends DefaultConsumer
 {
     private static $cnt = 0;
 
     public function onMessage($msg)
     {
-        echo self::$cnt . ",";
-        echo serialize($msg);
-        self::$cnt++;
+        if ($msg instanceof AMQPMessage) {
+            echo self::$cnt . ",body = " . $msg->body, "\n";
+            self::$cnt++;
+        }
+
         parent::onMessage($msg);
     }
 

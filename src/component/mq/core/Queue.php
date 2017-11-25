@@ -103,7 +103,7 @@ class Queue
     public function setTtl($ttl)
     {
         $this->ttl = $ttl;
-        $this->arguments['x-message-ttl'] = $ttl;
+        $this->arguments['x-message-ttl'] = ($ttl);
     }
 
     /**
