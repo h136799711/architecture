@@ -14,7 +14,7 @@
  *********************************
  */
 
-namespace by\component\securityCode\interfaces;
+namespace by\component\security_code\interfaces;
 
 
 interface SecurityCodeActionInterface

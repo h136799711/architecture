@@ -7,35 +7,34 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  * Revision History Version
  ********1.0.0********************
- * file created @ 2017-10-25 13:45
+ * file created @ 2017-10-25 13:44
  *********************************
  ********1.0.1********************
  *
  *********************************
  */
 
-namespace by\component\securityCode\constants;
+namespace by\component\security_code\entity;
 
 
-class SecurityCodeGenerateType
+use by\infrastructure\base\BaseEntity;
+
+class SecurityCodeEntity extends BaseEntity
 {
+
+    // member function
+
+    // construct
+    private $code;
+
+    // override function __toString()
 
     // member variables
 
-    /**
-     * 仅字母大小写
-     */
-    const ALPHABET = 1;
-
-    /**
-     * 字母 + 数字
-     */
-    const ALPHABET_AND_NUMBERS = 2;
-
-    /**
-     * 仅数字
-     */
-    const NUMBERS = 3;
+    public function __construct()
+    {
+        // TODO construct
+    }
 
     // getter setter
 

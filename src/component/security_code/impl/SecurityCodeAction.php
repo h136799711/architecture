@@ -14,10 +14,10 @@
  *********************************
  */
 
-namespace by\component\securityCode\impl;
+namespace by\component\security_code\impl;
 
 
-use by\component\securityCode\interfaces\SecurityCodeActionInterface;
+use by\component\security_code\interfaces\SecurityCodeActionInterface;
 
 class SecurityCodeAction implements SecurityCodeActionInterface
 {

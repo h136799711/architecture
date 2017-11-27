@@ -7,31 +7,20 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  * Revision History Version
  ********1.0.0********************
- * file created @ 2017-10-24 16:25
+ * file created @ 2017-11-27 14:26
  *********************************
  ********1.0.1********************
  *
  *********************************
  */
 
-namespace by\infrastructure\helper;
+namespace by\component\string_extend\helper;
 
-/**
- * 字符串帮助类
- * Class StringHelper
- * @package by_infrastructure
- */
+
 class StringHelper
 {
 
-    // member function
-
     private static $codeSet = '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY';
-
-    public function __construct()
-    {
-        // TODO construct
-    }
 
     /**
      * 支持随机生成只包含数字的随机字符串长度为1-8
@@ -73,10 +62,6 @@ class StringHelper
         return md5(uniqid());
     }
 
-    // override function __toString()
-
-    // member variables
-
     /**
      *
      * @param $type
@@ -90,7 +75,39 @@ class StringHelper
 
     }
 
+    /**
+     * 转换成骆驼式字符串
+     * 注意：
+     *  1. 只能处理 (下划线 + 小写字母)这种字符串
+     * @param $str
+     * @return string
+     */
+    public static function toCamelCase($str)
+    {
+        $str = ucwords(str_replace('_', ' ', $str));
+        $str = str_replace(' ', '', lcfirst($str));
+        return $str;
+    }
 
-    // getter setter
-
+    /**
+     * 骆驼式字符串转下划线
+     * 默认 每个大写字母都变成下划线 + 小写字母
+     * @param $camelCaseStr
+     * @param string $separator
+     * @return mixed|string
+     * @internal param $str
+     */
+    public static function camelCaseToUnderline($camelCaseStr, $separator = '_')
+    {
+        $temp_array = array();
+        for ($i = 0; $i < strlen($camelCaseStr); $i++) {
+            $ascii_code = ord($camelCaseStr[$i]);
+            if ($ascii_code >= 65 && $ascii_code <= 90) {
+                $temp_array[] = $separator . chr($ascii_code + 32);
+            } else {
+                $temp_array[] = $camelCaseStr[$i];
+            }
+        }
+        return implode('', $temp_array);
+    }
 }

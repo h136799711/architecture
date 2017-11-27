@@ -16,7 +16,7 @@
 
 namespace byTest\infrastructure\helper;
 
-use by\infrastructure\helper\StringHelper;
+use by\component\string_extend\helper\StringHelper;
 use PHPUnit\Framework\TestCase;
 
 class StringHelperTest extends TestCase

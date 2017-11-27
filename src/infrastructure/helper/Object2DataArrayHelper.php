@@ -79,7 +79,16 @@ class Object2DataArrayHelper
 
     public static function uncamelize($camelCaps, $separator = '_')
     {
-        return strtolower(preg_replace('/([a-z])([A-Z])/', "$1" . $separator . "$2", $camelCaps));
+        $temp_array = array();
+        for ($i = 0; $i < strlen($camelCaps); $i++) {
+            $ascii_code = ord($camelCaps[$i]);
+            if ($ascii_code >= 65 && $ascii_code <= 90) {
+                $temp_array[] = $separator . chr($ascii_code + 32);
+            } else {
+                $temp_array[] = $camelCaps[$i];
+            }
+        }
+        return implode('', $temp_array);
     }
 
     public static function convertUnderline($str)

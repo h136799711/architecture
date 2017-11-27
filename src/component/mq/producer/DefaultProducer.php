@@ -26,7 +26,7 @@ use by\component\mq\facade\RabbitAdmin;
 use by\component\mq\factory\ConnectionFactory;
 use by\component\mq\interfaces\ExchangeInterface;
 use by\component\mq\message\BaseMessage;
-use by\infrastructure\helper\StringHelper;
+use by\component\string_extend\helper\StringHelper;
 
 class DefaultProducer extends Producer
 {
