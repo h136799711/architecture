@@ -40,7 +40,7 @@ class Object2DataArrayHelper
      * 支持父类的属性封装,get函数只支持 public 作用域
      * @param object $instance 对象
      * @param array $properties 属性名称数组，属性名称必须是驼峰式
-     * @param array $ignoreNull 是否忽略null值，getter后null值的不会获取到
+     * @param bool $ignoreNull 是否忽略null值，getter后null值的不会获取到
      * @return array
      */
     public static function getDataArrayFrom($instance, $properties = [], $ignoreNull = true)
