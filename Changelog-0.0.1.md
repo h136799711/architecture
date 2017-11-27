@@ -7,6 +7,13 @@
 [![License](https://poser.pugx.org/itboye/architecture/license)](https://packagist.org/packages/itboye/architecture)
 
 ## 架构测试 V0.0.1
+### 2017-11-27
+
+1. 增加 by\infrastructure\interfaces\ObjectToArrayInterface 接口
+2. 增加 by\component\picture\entity\PictureEntity 类
+
+
+### old
 
 1.【增加】 BaseEntity 默认初始化时间字段
 增加了sdk代码
