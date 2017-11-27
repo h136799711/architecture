@@ -57,6 +57,11 @@ class ArrayHelper
 
     // member function
 
+    /**
+     * 过滤掉数组中的键
+     * @param array $array 原数组
+     * @param array $keys 需要过滤掉的键
+     */
     public static function filter(&$array, $keys = [])
     {
         array_walk($keys, function ($vo) use (&$array) {
@@ -64,6 +69,12 @@ class ArrayHelper
         });
     }
 
+    /**
+     * 从$_POST获取数据来设置到指定参数
+     * @param $param
+     * @param string $defaultValue
+     * @param null $scope
+     */
     public static function setValueFromPost(&$param, $defaultValue = '', $scope = null)
     {
         if (isset($_POST)) {

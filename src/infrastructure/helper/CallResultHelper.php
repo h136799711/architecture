@@ -40,7 +40,7 @@ class CallResultHelper
 
     // construct
 
-    public static function fail($data = '', $msg = 'fail', $code = -1)
+    public static function fail($msg = 'fail', $data = '', $code = -1)
     {
         return new CallResult($data, $msg, $code);
     }
