@@ -21,31 +21,14 @@ use by\infrastructure\base\BaseEntity;
 
 /**
  * Class BookPageEntity
- * 书页对象-每页对象
+ * 书页内容对象-每页对象
  * @package by\component\bookstore\v1\entity
  */
-class BookPageEntity extends BaseEntity
+class BookPageContentEntity extends BaseEntity
 {
+    private $pageContent;
     private $bookId;
     private $pageNo;
-    private $sourceType;
-    private $pageTitle;
-
-    /**
-     * @return mixed
-     */
-    public function getSourceType()
-    {
-        return $this->sourceType;
-    }
-
-    /**
-     * @param mixed $sourceType
-     */
-    public function setSourceType($sourceType)
-    {
-        $this->sourceType = $sourceType;
-    }
 
     /**
      * @return mixed
@@ -64,8 +47,7 @@ class BookPageEntity extends BaseEntity
     }
 
     /**
-     * 当前页码
-     * @return integer
+     * @return mixed
      */
     public function getPageNo()
     {
@@ -73,8 +55,7 @@ class BookPageEntity extends BaseEntity
     }
 
     /**
-     * 设置页码
-     * @param integer $pageNo
+     * @param mixed $pageNo
      */
     public function setPageNo($pageNo)
     {
@@ -82,21 +63,21 @@ class BookPageEntity extends BaseEntity
     }
 
     /**
-     * 获取当前书页标题
+     * 获取当前书页内容
      * @return string
      */
-    public function getPageTitle()
+    public function getPageContent()
     {
-        return $this->pageTitle;
+        return $this->pageContent;
     }
 
     /**
-     * 设置当前书页标题
-     * @param string $pageTitle
+     * 设置书页内容
+     * @param mixed $pageContent
      */
-    public function setPageTitle($pageTitle)
+    public function setPageContent($pageContent)
     {
-        $this->pageTitle = $pageTitle;
+        $this->pageContent = $pageContent;
     }
 
 }
