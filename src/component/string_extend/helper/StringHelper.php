@@ -29,7 +29,7 @@ class StringHelper
     /**
      * 数字转36进制字符串，默认大写字符串
      * 1. 只支持大于0的转换，小于0 则会返回0
-     * @param $num
+     * @param int $num 待转换数字 大于0
      * @return int|string
      */
     public static function intTo36Hex($num)
