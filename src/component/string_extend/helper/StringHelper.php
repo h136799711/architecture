@@ -27,6 +27,27 @@ class StringHelper
     private static $codeSet = '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY';
 
     /**
+     * 数字转36进制字符串，默认大写字符串
+     * 1. 只支持大于0的转换，小于0 则会返回0
+     * @param $num
+     * @return int|string
+     */
+    public static function intTo36Hex($num)
+    {
+        $num = intval($num);
+        if ($num <= 0)
+            return 0;
+        $charArr = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+        $char = '';
+        do {
+            $key = ($num - 1) % 36;
+            $char = $charArr[$key] . $char;
+            $num = floor(($num - $key) / 36);
+        } while ($num > 0);
+        return $char;
+    }
+
+    /**
      * utf8编码转GBK编码
      * @param $str
      * @return string
