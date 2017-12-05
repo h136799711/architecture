@@ -16,11 +16,25 @@
 
 namespace by\component\string_extend\helper;
 
-
+/**
+ * Class StringHelper
+ * 字符串帮助类
+ * @package by\component\string_extend\helper
+ */
 class StringHelper
 {
 
     private static $codeSet = '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY';
+
+    /**
+     * utf8编码转GBK编码
+     * @param $str
+     * @return string
+     */
+    public static function utf8ToGbk($str)
+    {
+        return iconv('utf-8', 'gbk', $str);
+    }
 
     /**
      * 支持随机生成只包含数字的随机字符串长度为1-8

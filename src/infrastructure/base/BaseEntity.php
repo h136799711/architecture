@@ -17,8 +17,16 @@
 namespace by\infrastructure\base;
 
 
-class BaseEntity extends BaseObject
+use by\infrastructure\helper\Object2DataArrayHelper;
+use by\infrastructure\interfaces\ObjectToArrayInterface;
+
+abstract class BaseEntity extends BaseObject implements ObjectToArrayInterface
 {
+
+    public function toArray()
+    {
+        return Object2DataArrayHelper::getDataArrayFrom($this);
+    }
 
     // member function
 

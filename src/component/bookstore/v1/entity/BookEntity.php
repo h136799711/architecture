@@ -26,6 +26,7 @@ use by\infrastructure\base\BaseEntity;
  */
 class BookEntity extends BaseEntity
 {
+
     /**
      * 书籍完本
      */

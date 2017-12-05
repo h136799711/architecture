@@ -2,11 +2,11 @@
 <phpunit bootstrap="./vendor/autoload.php"
          stopOnError="true"
          stopOnFailure="true">
-    <testsuite name="infra">
-        <directory>./test/infrastructure</directory>
-    </testsuite>
 
     <testsuites>
+        <testsuite name="bookstore">
+            <directory>./test/bookstore</directory>
+        </testsuite>
         <testsuite name="infra">
             <directory>./test/infrastructure/*Test.php</directory>
         </testsuite>
