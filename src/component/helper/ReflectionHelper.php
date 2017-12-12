@@ -35,10 +35,9 @@ class ReflectionHelper
         try {
             $method = $ref->getMethod($methodName);
             if (!$method->isPublic()) {
-                return CallResultHelper::fail(lang('err_access_not_public_method'));
+                return CallResultHelper::fail('err_access_not_public_method');
             }
             $params = $method->getParameters();
-            var_dump($params);
             $args = [];
             foreach ($params as $vo) {
                 if ($vo instanceof \ReflectionParameter) {
