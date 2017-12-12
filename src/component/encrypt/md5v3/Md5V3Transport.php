@@ -42,11 +42,11 @@ class Md5V3Transport implements TransportInterface
     public function __construct($data = [])
     {
         if (!array_key_exists('itboye', $data)) {
-            throw new CryptException(lang('lack_parameter', ['param' => 'itboye']));
+            throw new CryptException('param itboye need');
         }
 
         if (!array_key_exists('client_secret', $data)) {
-            throw new CryptException(lang('lack_parameter', ['param' => 'client_secret']));
+            throw new CryptException('param client_secret need');
         }
 
         $this->entity = new DataStructEntity();
@@ -108,7 +108,7 @@ class Md5V3Transport implements TransportInterface
     protected static function checkNullData($data)
     {
         if (is_null($data)) {
-            throw new CryptException(lang('err_return_is_not_null'));
+            throw new CryptException(('err_return_is_not_null'));
         } elseif (is_array($data)) {
             foreach ($data as $value) {
                 self::checkNullData($value);
