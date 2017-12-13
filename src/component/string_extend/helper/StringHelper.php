@@ -23,6 +23,22 @@ namespace by\component\string_extend\helper;
  */
 class StringHelper
 {
+    /**
+     * 仅字母大小写
+     */
+    const ALPHABET = 1;
+
+    /**
+     * 字母 + 数字
+     */
+    const ALPHABET_AND_NUMBERS = 2;
+
+    /**
+     * 仅数字
+     */
+    const NUMBERS = 3;
+
+    private static $alphaCodeSet = 'abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY';
 
     private static $codeSet = '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY';
 
@@ -86,6 +102,22 @@ class StringHelper
         return implode("", $code);
     }
 
+    /**
+     * 随机字母
+     * @param $length
+     * @return string
+     */
+    public static function randAlphabet($length)
+    {
+        if ($length < 0) $length = 1;
+        if ($length > 64) $length = 64;
+        $code = [];
+        for ($i = 0; $i < $length; $i++) {
+            $code[$i] = self::$alphaCodeSet[mt_rand(0, strlen(self::$codeSet) - 1)];
+        }
+        return implode("", $code);
+    }
+
     // construct
 
     /**
@@ -98,16 +130,23 @@ class StringHelper
     }
 
     /**
-     *
-     * @param $type
+     * 生成随机字符
+     * @param string $type 该帮助类 ALPHABET|ALPHABET_AND_NUMBERS|NUMBERS
      * @param int $length
-     * @author hebidu <email:346551990@qq.com>
-     * @modify 2017-10-24 16:26:30
+     * @return int|string
      */
     public static function randStr($type, $length = 6)
     {
         // TODO 生成随机长度的字符串
+        if ($type == self::ALPHABET) {
+            return self::randAlphabet($length);
+        } elseif ($type == self::ALPHABET_AND_NUMBERS) {
+            return self::randAlphabetAndNumbers($length);
+        } elseif ($type == self::NUMBERS) {
+            return self::randNumbers($length);
+        }
 
+        return "unknown type";
     }
 
     /**
