@@ -54,7 +54,7 @@ class DocParserHelperTest extends TestCase
 
         $this->assertEquals(false, $result->isSuccess());
 
-        $result = ReflectionHelper::invokeWithArgs($this, 'add', ['demo' => '124444', 'demoTest' => 12345678901, 'demo_test' => 12345678901]);
+        $result = ReflectionHelper::invokeWithArgs($this, 'add', ['demo' => '124444', 'reg_from', 'demoTest' => 12345678901, 'demo_test' => 12345678901]);
 
         $this->assertEquals(true, $result->isSuccess(), $result->getMsg());
         $data = $result->getData();
@@ -63,6 +63,7 @@ class DocParserHelperTest extends TestCase
 
     /**
      *
+     * @reg_from_match_regex reg:/^\d{1}$/i msg:regFrom length 1 and only digit
      * @demo_test_match_regex reg:/^\d{1,10}$/i     msg:the type must be integer
      * @demo_match_regex reg:/^\w{3,6}$/i msg:the value length must in 3-6
      * @demo_required demo is required
@@ -71,7 +72,7 @@ class DocParserHelperTest extends TestCase
      * @param string $demoTest
      * @return \by\infrastructure\base\CallResult
      */
-    public function add($demo = '', $demoTest = '')
+    public function add($demo = '', $demoTest = '', $regFrom = '')
     {
         return CallResultHelper::success(['demo' => $demo, 'demoTest' => $demoTest]);
     }

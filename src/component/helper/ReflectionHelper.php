@@ -96,7 +96,7 @@ class ReflectionHelper
 
                     $key = $underLineParamName . self::$required;
 
-                    if (array_key_exists($key, $docParams) && $value == $defaultValue) {
+                    if (array_key_exists($key, $docParams) && is_null($value)) {
                         $msg = $docParams[$key];
                         return CallResultHelper::fail($msg, $data);
                     }
