@@ -4,8 +4,8 @@
          stopOnFailure="true">
 
     <testsuites>
-        <testsuite name="helper">
-            <directory>./test/helper</directory>
+        <testsuite name="ip">
+            <directory>./test/ip</directory>
         </testsuite>
         <testsuite name="bookstore">
             <directory>./test/bookstore</directory>
