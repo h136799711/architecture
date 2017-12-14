@@ -17,6 +17,7 @@
 namespace by\component\helper;
 
 
+use by\component\lang\helper\LangHelper;
 use by\component\string_extend\helper\StringHelper;
 use by\infrastructure\helper\CallResultHelper;
 use by\infrastructure\helper\DocParserHelper;
@@ -43,7 +44,7 @@ class ReflectionHelper
         try {
             $method = $ref->getMethod($methodName);
             if (!$method->isPublic()) {
-                return CallResultHelper::fail('error access the method');
+                return CallResultHelper::fail(LangHelper::lang('cant access no public method'));
             }
             $params = $method->getParameters();
             $doc = $method->getDocComment();
@@ -81,14 +82,14 @@ class ReflectionHelper
                                 $item = trim($item);
                                 list($reg, $msg) = self::splitRegex($item);
                                 if (!preg_match($reg, $value)) {
-                                    return CallResultHelper::fail($msg);
+                                    return CallResultHelper::fail(LangHelper::lang($msg));
                                 }
                             }
                         } else {
                             $regex = trim($regex);
                             list($reg, $msg) = self::splitRegex($regex);
                             if (!preg_match($reg, $value)) {
-                                return CallResultHelper::fail($msg);
+                                return CallResultHelper::fail(LangHelper::lang($msg));
                             }
                         }
                     }
@@ -98,7 +99,8 @@ class ReflectionHelper
 
                     if (array_key_exists($key, $docParams) && is_null($value)) {
                         $msg = $docParams[$key];
-                        return CallResultHelper::fail($msg, $data);
+
+                        return CallResultHelper::fail(LangHelper::lang($msg), $data);
                     }
 
                     array_push($args, $value);
