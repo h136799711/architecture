@@ -16,6 +16,7 @@
 
 namespace by\infrastructure\helper;
 
+use by\component\lang\helper\LangHelper;
 use by\infrastructure\base\CallResult;
 
 /**
@@ -35,6 +36,8 @@ class CallResultHelper
 
     public static function success($data = '', $msg = 'success', $code = 0)
     {
+        if ($msg === 'success') $msg = LangHelper::lang($msg);
+
         return new CallResult($data, $msg, $code);
     }
 
@@ -42,6 +45,7 @@ class CallResultHelper
 
     public static function fail($msg = 'fail', $data = '', $code = -1)
     {
+        if ($msg === 'fail') $msg = LangHelper::lang($msg);
         return new CallResult($data, $msg, $code);
     }
 
