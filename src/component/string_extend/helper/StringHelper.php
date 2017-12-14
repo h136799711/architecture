@@ -113,7 +113,7 @@ class StringHelper
         if ($length > 64) $length = 64;
         $code = [];
         for ($i = 0; $i < $length; $i++) {
-            $code[$i] = self::$alphaCodeSet[mt_rand(0, strlen(self::$codeSet) - 1)];
+            $code[$i] = self::$alphaCodeSet[mt_rand(0, strlen(self::$alphaCodeSet) - 1)];
         }
         return implode("", $code);
     }
