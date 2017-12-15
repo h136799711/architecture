@@ -108,7 +108,7 @@ class Md5V3Transport implements TransportInterface
         $this->checkNullData($data['data']);
 
         $type = ($data['code'] == 0) ? "T" : "F";
-        $data = $this->encryptData($data);
+        $data = $this->encryptInnerData($data);
         $entity = new DataStructEntity();
         $entity->setClientId($this->entity->getClientId());
         $returnData = [
