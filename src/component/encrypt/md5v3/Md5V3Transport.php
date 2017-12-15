@@ -37,32 +37,72 @@ class Md5V3Transport implements TransportInterface
     /**
      * Md5V3Transport constructor.
      * @param array $data
-     * @throws CryptException
      */
     public function __construct($data = [])
     {
-        if (!array_key_exists('itboye', $data)) {
-            throw new CryptException('param itboye need');
-        }
-
-        if (!array_key_exists('client_secret', $data)) {
-            throw new CryptException('param client_secret need');
-        }
-
         $this->entity = new DataStructEntity();
-        $this->clientSecret = $data['client_secret'];
-        $this->data = $data;
-
     }
 
     /**
-     * @param $data
+     * 这种格式输入参数的数据返回不会完全加密 ['code'=>-1, 'data'=>[], 'msg'=>]
+     * 不会完全加密的数据就无法通过decrypt进行解密
+     * 其它格式的数据将会进行完全加密
+     * @param array $data
      * @return array
      * @throws CryptException
      */
     function encrypt($data)
     {
         //
+        if (array_key_exists('code', $data) &&
+            array_key_exists('data', $data) &&
+            array_key_exists('msg', $data)
+        ) {
+
+            return $this->returnPrimaryData($data);
+        }
+
+        return $this->completeEncryptData($data);
+    }
+
+    private function completeEncryptData($data)
+    {
+        $entity = new DataStructEntity();
+        Object2DataArrayHelper::setData($entity, $data);
+        $innerData = $this->encryptData($entity->getData());
+        $entity->setData($innerData);
+        $sign = SignHelper::sign($entity->getTime(), $entity->getType(), $innerData, $entity->getClientSecret(), $entity->getNotifyId());
+        $entity->setSign($sign);
+
+        $arr = $entity->toArray();
+
+        unset($arr['id']);
+        unset($arr['client_secret']);
+        var_dump($arr);
+        $returnData = [
+            'client_id' => $entity->getClientId(),
+            'itboye' => $this->encryptTransmissionData($arr, $entity->getClientSecret()),
+            'app_type' => $entity->getAppType(),
+            'app_version' => $entity->getAppVersion()
+        ];
+
+        return $returnData;
+    }
+
+    private function encryptTransmissionData($param, $desKey)
+    {
+        $data = openssl_encrypt(json_encode($param), "des-ecb", $desKey);
+        return base64_encode($data);
+    }
+
+    /**
+     * 返回的数据没有加密只有签名
+     * @param $data
+     * @return array
+     * @throws CryptException
+     */
+    private function returnPrimaryData($data)
+    {
         $data['data'] = $this->toStringData($data['data']);
 
         $this->checkNullData($data['data']);
@@ -105,7 +145,7 @@ class Md5V3Transport implements TransportInterface
      * @param $data
      * @throws CryptException
      */
-    protected static function checkNullData($data)
+    protected function checkNullData($data)
     {
         if (is_null($data)) {
             throw new CryptException(('err_return_is_not_null'));
@@ -120,7 +160,7 @@ class Md5V3Transport implements TransportInterface
         }
     }
 
-    function encryptData($data)
+    protected function encryptData($data)
     {
         $str = json_encode($data, 0, 512);
         return base64_encode(base64_encode($str));
@@ -133,6 +173,16 @@ class Md5V3Transport implements TransportInterface
      */
     function decrypt($data)
     {
+        $this->data = $data;
+        if (!array_key_exists('itboye', $this->data)) {
+            throw new CryptException('param itboye need');
+        }
+
+        if (!array_key_exists('client_secret', $this->data)) {
+            throw new CryptException('param client_secret need');
+        }
+
+        $this->clientSecret = $data['client_secret'];
         $itboye = $this->data['itboye'];
         unset($this->data['itboye']);
         $otherParams = $this->data;
@@ -143,7 +193,7 @@ class Md5V3Transport implements TransportInterface
         $obj = json_decode($decodeData, JSON_OBJECT_AS_ARRAY);
         $decodeData = empty($obj) ? [] : $obj;
         Object2DataArrayHelper::setData($this->entity, $decodeData);
-
+        var_dump($decodeData);
         $this->entity->setClientSecret($this->clientSecret);
         $this->entity->isValid();
 

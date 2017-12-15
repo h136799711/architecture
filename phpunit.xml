@@ -4,6 +4,9 @@
          stopOnFailure="true">
 
     <testsuites>
+        <testsuite name="encrypt">
+            <directory>./test/encrypt</directory>
+        </testsuite>
         <testsuite name="ip">
             <directory>./test/ip</directory>
         </testsuite>

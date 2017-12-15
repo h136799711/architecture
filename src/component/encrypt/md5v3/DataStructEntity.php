@@ -18,6 +18,7 @@ namespace by\component\encrypt\md5v3;
 
 
 use by\component\encrypt\exception\CryptException;
+use by\component\lang\helper\LangHelper;
 use by\infrastructure\base\BaseEntity;
 
 class DataStructEntity extends BaseEntity
@@ -32,6 +33,8 @@ class DataStructEntity extends BaseEntity
     private $type;
     private $sign;
     private $apiVer;
+    private $appType;
+    private $appVersion;
 
     public function __construct()
     {
@@ -43,6 +46,40 @@ class DataStructEntity extends BaseEntity
         $this->setTime('');
         $this->setType('');
         $this->setSign('');
+        $this->setAppType("");
+        $this->setAppVersion('');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAppType()
+    {
+        return $this->appType;
+    }
+
+    /**
+     * @param mixed $appType
+     */
+    public function setAppType($appType)
+    {
+        $this->appType = $appType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAppVersion()
+    {
+        return $this->appVersion;
+    }
+
+    /**
+     * @param mixed $appVersion
+     */
+    public function setAppVersion($appVersion)
+    {
+        $this->appVersion = $appVersion;
     }
 
     /**
@@ -77,11 +114,11 @@ class DataStructEntity extends BaseEntity
 //        if($now - 60 > $this->alParams->getTime() || $this->alParams->getTime() > $now + 60){
 //            $this->apiReturnErr(lang('invalid_request'),ErrorCode::Invalid_Parameter);
 //        }
-
-        $sign = SignHelper::sign($this->getTime(), $this->getType(), $this->getData(), $this->getClientSecret(), $this->getNotifyId());
+        $innerData = $this->getData();
+        $sign = SignHelper::sign($this->getTime(), $this->getType(), $innerData, $this->getClientSecret(), $this->getNotifyId());
 
         if (!($sign == $this->getSign())) {
-            throw new CryptException(lang('err_sign'));
+            throw new CryptException(LangHelper::lang('err_sign'));
         }
     }
 
@@ -155,7 +192,7 @@ class DataStructEntity extends BaseEntity
 
     /**
      * 获取携带数据
-     * @return string
+     * @return mixed
      */
     public function getData()
     {
@@ -164,7 +201,7 @@ class DataStructEntity extends BaseEntity
 
     /**
      * 设置携带数据
-     * @param string $data
+     * @param $data
      */
     public function setData($data)
     {
