@@ -22,6 +22,7 @@ use by\component\string_extend\helper\StringHelper;
 use by\infrastructure\helper\CallResultHelper;
 use by\infrastructure\helper\DocParserHelper;
 use by\infrastructure\helper\Object2DataArrayHelper;
+use by\infrastructure\interfaces\CheckInterfaces;
 
 class ReflectionHelper
 {
@@ -33,6 +34,7 @@ class ReflectionHelper
      * 使用传入数据调用方法
      * 1. 支持 @参数名_required 注释 ，在参数值等于默认值或为null时会返回调用失败信息
      *     比如 @username_required username is required
+     * 2. 2017-12-15 增加支持对实现CheckInterface的类参数进行检验
      * @param object $object 对象
      * @param string $methodName 方法名
      * @param array $data 传入参数值数据
@@ -62,6 +64,10 @@ class ReflectionHelper
                         $clsName = $cls->getName();
                         $value = new $clsName;
                         Object2DataArrayHelper::setData($value, $data);
+                        if ($value instanceof CheckInterfaces) {
+                            $checkResult = ($value->check());
+                            if (!$checkResult->isSuccess()) return $checkResult;
+                        }
                     } elseif (array_key_exists($underLineParamName, $data)) {
                         // 下划线形式
                         $value = $data[$underLineParamName];
