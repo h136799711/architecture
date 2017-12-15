@@ -26,10 +26,25 @@ interface TransportInterface
      */
     function encrypt($data);
 
+
+    /**
+     * 加密数据
+     * @param $data
+     * @return mixed
+     */
+    function encryptInnerData($data);
+
     /**
      * 解密传输数据
      * @param $data
      * @return mixed
      */
     function decrypt($data);
+
+    /**
+     * 解密数据
+     * @param $data
+     * @return mixed
+     */
+    function decryptInnerData($data);
 }

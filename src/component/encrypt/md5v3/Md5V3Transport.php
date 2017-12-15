@@ -69,7 +69,7 @@ class Md5V3Transport implements TransportInterface
     {
         $entity = new DataStructEntity();
         Object2DataArrayHelper::setData($entity, $data);
-        $innerData = $this->encryptData($entity->getData());
+        $innerData = $this->encryptInnerData($entity->getData());
         $entity->setData($innerData);
         $sign = SignHelper::sign($entity->getTime(), $entity->getType(), $innerData, $entity->getClientSecret(), $entity->getNotifyId());
         $entity->setSign($sign);
@@ -160,10 +160,15 @@ class Md5V3Transport implements TransportInterface
         }
     }
 
-    protected function encryptData($data)
+    function encryptInnerData($data)
     {
         $str = json_encode($data, 0, 512);
         return base64_encode(base64_encode($str));
+    }
+
+    function decryptInnerData($data)
+    {
+        return json_decode(base64_decode(base64_decode($data)), JSON_OBJECT_AS_ARRAY);
     }
 
     /**
@@ -193,11 +198,11 @@ class Md5V3Transport implements TransportInterface
         $obj = json_decode($decodeData, JSON_OBJECT_AS_ARRAY);
         $decodeData = empty($obj) ? [] : $obj;
         Object2DataArrayHelper::setData($this->entity, $decodeData);
-        var_dump($decodeData);
+        
         $this->entity->setClientSecret($this->clientSecret);
         $this->entity->isValid();
 
-        $data = $this->decryptData($this->entity->getData());
+        $data = $this->decryptInnerData($this->entity->getData());
         if (empty($data)) $data = [];
         $requestStructData = $this->entity->toArray();
         unset($requestStructData['data']);
@@ -231,10 +236,6 @@ class Md5V3Transport implements TransportInterface
         return $post;
     }
 
-    function decryptData($encryptData)
-    {
-        return json_decode(base64_decode(base64_decode($encryptData)), JSON_OBJECT_AS_ARRAY);
-    }
 
     /**
      * @return DataStructEntity
