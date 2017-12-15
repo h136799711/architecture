@@ -160,13 +160,13 @@ class Md5V3Transport implements TransportInterface
         }
     }
 
-    function encryptInnerData($data)
+    public function encryptInnerData($data)
     {
         $str = json_encode($data, 0, 512);
         return base64_encode(base64_encode($str));
     }
 
-    function decryptInnerData($data)
+    public function decryptInnerData($data)
     {
         return json_decode(base64_decode(base64_decode($data)), JSON_OBJECT_AS_ARRAY);
     }
@@ -176,7 +176,7 @@ class Md5V3Transport implements TransportInterface
      * @return array
      * @throws CryptException
      */
-    function decrypt($data)
+    public function decrypt($data)
     {
         $this->data = $data;
         if (!array_key_exists('itboye', $this->data)) {
@@ -198,7 +198,7 @@ class Md5V3Transport implements TransportInterface
         $obj = json_decode($decodeData, JSON_OBJECT_AS_ARRAY);
         $decodeData = empty($obj) ? [] : $obj;
         Object2DataArrayHelper::setData($this->entity, $decodeData);
-        
+
         $this->entity->setClientSecret($this->clientSecret);
         $this->entity->isValid();
 
