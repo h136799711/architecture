@@ -78,7 +78,7 @@ class Md5V3Transport implements TransportInterface
 
         unset($arr['id']);
         unset($arr['client_secret']);
-        var_dump($arr);
+        
         $returnData = [
             'client_id' => $entity->getClientId(),
             'itboye' => $this->encryptTransmissionData($arr, $entity->getClientSecret()),
