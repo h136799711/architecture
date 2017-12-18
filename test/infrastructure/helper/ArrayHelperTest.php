@@ -71,28 +71,6 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals($lengthOfData2 - count($key2), count($data2));
     }
 
-    /**
-     * @covers ArrayHelper::setValue()
-     * @uses   ArrayHelper
-     * @group helper
-     * @group ArrayHelper
-     */
-    public function testSetValue()
-    {
-        $obj = new \stdClass();
-        $obj->id = 123456;
-        $_POST = [''];
-        $arr = [0, 1, 2, 3];
-        $data = ['id' => $obj, 'username' => 'hebidu', 'password' => '123456', 'test' => $arr];
-        ArrayHelper::setValue($username, $data, 'default', get_defined_vars());
-        $this->assertEquals('hebidu', $username);
-        ArrayHelper::setValue($password, $data, 'default', get_defined_vars());
-        $this->assertEquals('123456', $password);
-        ArrayHelper::setValue($test, $data, 'default', get_defined_vars());
-        $this->assertEquals($arr, $test);
-        ArrayHelper::setValue($id, $data, 'default', get_defined_vars());
-        $this->assertEquals($obj, $id);
-    }
 
     // override function __toString()
 

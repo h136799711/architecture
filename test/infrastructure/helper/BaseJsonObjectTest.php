@@ -30,7 +30,17 @@ class BaseJsonObjectTest extends TestCase
     // member variables
     private $toUpper;
     private $toLower;
+    /**
+     *
+     * @var int
+     */
     private $null;
+
+    /**
+     * test
+     * @var  \byTest\infrastructure\helper\TestEntity
+     */
+    private $entity;
 
     /**
      * @covers BaseJsonObject
@@ -41,12 +51,14 @@ class BaseJsonObjectTest extends TestCase
     public function testJsonObject()
     {
         $test = new BaseJsonObjectTest();
-        Object2DataArrayHelper::setData($test, ['id' => '11', 'to_lower' => 'lower', 'to_upper' => 'upper', 'null' => null]);
+        Object2DataArrayHelper::setData($test, ['id' => '11', 'to_lower' => 'lower', 'to_upper' => 'upper', 'null' => null, 'name' => 'set test entity']);
+        var_dump($test->getEntity());
         $array = Object2DataArrayHelper::getDataArrayFrom($test, ['id', 'to_upper']);
         $this->assertArrayNotHasKey('to_lower', $array);
         $this->assertArrayHasKey('to_upper', $array);
         $this->assertArrayHasKey('id', $array);
         $array = Object2DataArrayHelper::getDataArrayFrom($test);
+        var_dump($array);
         $this->assertArrayNotHasKey('null', $array);
         $this->assertArrayHasKey('id', $array);
         $this->assertArrayHasKey('to_upper', $array);
@@ -66,6 +78,23 @@ class BaseJsonObjectTest extends TestCase
         $this->assertArrayHasKey('to_upper', $array);
         $this->assertArrayNotHasKey('toUpper', $array);
     }
+
+    /**
+     * @return TestEntity
+     */
+    public function getEntity()
+    {
+        return $this->entity;
+    }
+
+    /**
+     * @param TestEntity $entity
+     */
+    public function setEntity($entity)
+    {
+        $this->entity = $entity;
+    }
+
 
     /**
      * @return mixed

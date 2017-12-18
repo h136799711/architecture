@@ -4,6 +4,9 @@
          stopOnFailure="true">
 
     <testsuites>
+        <testsuite name="obj2arr">
+            <directory>./test/infrastructure/helper/BaseJsonObjectTest.php</directory>
+        </testsuite>
         <testsuite name="encrypt">
             <directory>./test/encrypt</directory>
         </testsuite>

@@ -17,6 +17,8 @@
 namespace by\infrastructure\helper;
 
 
+use by\infrastructure\base\BaseEntity;
+
 class Object2DataArrayHelper
 {
     // member function
@@ -55,11 +57,23 @@ class Object2DataArrayHelper
             }
         }
         foreach ($properties as $vo) {
+            $clsName = '';
             if ($vo instanceof \ReflectionProperty) {
                 $propName = self::uncamelize($vo->getName());
+                $docProp = $vo->getDocComment();
+                DocParserHelper::clear();
+                $docParseItems = DocParserHelper::parse($docProp);
+                if (is_array($docParseItems) && array_key_exists('var', $docParseItems)) {
+                    $var = trim($docParseItems['var']);
+                    if (class_exists($var)) {
+                        $clsName = $var;
+                    }
+                }
             } else {
                 $propName = self::uncamelize($vo);
             }
+
+
             $key = self::convertUnderline($propName);
             $methodName = 'get' . ucfirst($key);
 
@@ -70,7 +84,12 @@ class Object2DataArrayHelper
                     if ($ignoreNull && is_null($propValue)) {
                         continue;
                     }
-                    $data[$propName] = $propValue;
+
+                    if ($propValue instanceof BaseEntity && get_class($propValue) == $clsName) {
+                        $data = array_merge($data, $propValue->toArray());
+                    } else {
+                        $data[$propName] = $propValue;
+                    }
                 }
             }
         }
@@ -102,6 +121,8 @@ class Object2DataArrayHelper
 
     /**
      * 将传入的键值对数组通过set方法进行赋值到一个类实例的属性
+     * 2017-12-18:
+     * 增加了对属性也是 BaseEntity 对象的处理，一定要在注解中指明完全的类名
      * 要求：
      * 属性必须是驼峰式且需要set方法作为反射调用
      * 数据数组中键可以是下划线也可以同属性名称一致
@@ -118,21 +139,28 @@ class Object2DataArrayHelper
      *  上述 数据数组的propCame和prop_came都可以转换到PropTest的propCame属性
      * @param $instance
      * @param null $data
+     * @param int $level 层级-防止无限递归
      */
-    public static function setData($instance, $data = null)
+    public static function setData($instance, $data = null, $level = 1)
     {
+        if ($level === 3) return;
+
         if (!empty($data) && is_array($data)) {
             $className = get_class($instance);
             $ref = new \ReflectionClass($className);
             $properties = self::getAllProperties($instance);//$ref->getProperties();
             foreach ($properties as $obj) {
                 $name = $obj->name;
+                $varObj = self::isEntityProperty($obj);
                 $key = self::uncamelize($name);
                 $methodName = 'set' . ucfirst($name);
                 if ($ref->hasMethod($methodName)) {
                     $method = $ref->getMethod($methodName);
                     if ($method->isPublic()) {
-                        if (array_key_exists($key, $data)) {
+                        if (!is_null($varObj)) {
+                            self::setData($varObj, $data, $level + 1);
+                            $method->invoke($instance, $varObj);
+                        } elseif (array_key_exists($key, $data)) {
                             $method->invoke($instance, $data[$key]);
                         } elseif ((array_key_exists($name, $data))) {
                             $method->invoke($instance, $data[$name]);
@@ -143,10 +171,21 @@ class Object2DataArrayHelper
         }
     }
 
-    // override function __toString()
-
-    // member variables
-
-    // getter setter
+    private static function isEntityProperty(\ReflectionProperty $obj)
+    {
+        $docProp = $obj->getDocComment();
+        DocParserHelper::clear();
+        $docParseItems = DocParserHelper::parse($docProp);
+        if (is_array($docParseItems) && array_key_exists('var', $docParseItems)) {
+            $var = trim($docParseItems['var']);
+            if (class_exists($var)) {
+                $varObj = new $var();
+                if ($varObj instanceof BaseEntity) {
+                    return $varObj;
+                }
+            }
+        }
+        return null;
+    }
 
 }
