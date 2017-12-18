@@ -57,18 +57,8 @@ class Object2DataArrayHelper
             }
         }
         foreach ($properties as $vo) {
-            $clsName = '';
             if ($vo instanceof \ReflectionProperty) {
                 $propName = self::uncamelize($vo->getName());
-                $docProp = $vo->getDocComment();
-                DocParserHelper::clear();
-                $docParseItems = DocParserHelper::parse($docProp);
-                if (is_array($docParseItems) && array_key_exists('var', $docParseItems)) {
-                    $var = trim($docParseItems['var']);
-                    if (class_exists($var)) {
-                        $clsName = $var;
-                    }
-                }
             } else {
                 $propName = self::uncamelize($vo);
             }
@@ -85,8 +75,8 @@ class Object2DataArrayHelper
                         continue;
                     }
 
-                    if ($propValue instanceof BaseEntity && get_class($propValue) == $clsName) {
-                        $data = array_merge($data, $propValue->toArray());
+                    if ($propValue instanceof BaseEntity) {
+                        $data[$propName] = $propValue->toArray();
                     } else {
                         $data[$propName] = $propValue;
                     }
