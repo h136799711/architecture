@@ -21,18 +21,20 @@ use by\infrastructure\base\BaseEntity;
 
 class Object2DataArrayHelper
 {
+    public static $cacheReflectionCls = [];
+    public static $cacheEntityProperty = [];
+
     // member function
     public function __construct()
     {
         // TODO construct
     }
 
-    public static function getAllProperties($instance)
+    public static function getAllProperties(\ReflectionClass $refCls)
     {
-        $parent = new \ReflectionClass($instance);
-        $properties = $parent->getProperties();
-        while (($parent = $parent->getParentClass())) {
-            $properties = array_merge($parent->getProperties(), $properties);
+        $properties = $refCls->getProperties();
+        while (($refCls = $refCls->getParentClass())) {
+            $properties = array_merge($refCls->getProperties(), $properties);
         }
         return $properties;
     }
@@ -109,8 +111,27 @@ class Object2DataArrayHelper
 
     // construct
 
+
+    /**
+     * @param $clsName
+     * @return \ReflectionClass
+     */
+    private static function getReflectionCls($clsName)
+    {
+        $key = md5($clsName);
+        if (!array_key_exists($key, self::$cacheReflectionCls)) {
+            self::$cacheReflectionCls[$key] = new \ReflectionClass($clsName);
+        }
+        return self::$cacheReflectionCls[$key];
+    }
+
+
     /**
      * 将传入的键值对数组通过set方法进行赋值到一个类实例的属性
+     * 2017-12-19:
+     *  性能优化,针对超过1000个的对象进行循环设置，会有一定的性能损失相比于直接设置对象。
+     *  包含Entity的注解必须以 Entity 结尾
+     *  var {...}Entity
      * 2017-12-18:
      * 增加了对属性也是 BaseEntity 对象的处理，一定要在注解中指明完全的类名
      * 要求：
@@ -137,15 +158,18 @@ class Object2DataArrayHelper
 
         if (!empty($data) && is_array($data)) {
             $className = get_class($instance);
-            $ref = new \ReflectionClass($className);
-            $properties = self::getAllProperties($instance);//$ref->getProperties();
+
+            $ref = self::getReflectionCls($className);
+            $properties = self::getAllProperties($ref);
             foreach ($properties as $obj) {
                 $name = $obj->name;
                 $varObj = self::isEntityProperty($obj);
                 $key = self::uncamelize($name);
                 $methodName = 'set' . ucfirst($name);
                 if ($ref->hasMethod($methodName)) {
+
                     $method = $ref->getMethod($methodName);
+
                     if ($method->isPublic()) {
                         if (!is_null($varObj)) {
                             self::setData($varObj, $data, $level + 1);
@@ -160,10 +184,25 @@ class Object2DataArrayHelper
             }
         }
     }
-
     private static function isEntityProperty(\ReflectionProperty $obj)
     {
         $docProp = $obj->getDocComment();
+        // 如果每个属性都进行判断将会耗费很长时间，一个类10个属性，1000个就达到10次
+        // 直接过滤掉不敢兴趣的
+        $reg = "/@var(.*)Entity/i";
+        if (!preg_match($reg, $docProp)) {
+            return null;
+        }
+//        if (strpos($docProp, "@var") === false) {
+//            return null;
+//        }
+
+        $key = md5($docProp);
+        if (array_key_exists($key, self::$cacheEntityProperty)) {
+            $clsName = self::$cacheEntityProperty[$key];
+            return new $clsName;
+        }
+
         DocParserHelper::clear();
         $docParseItems = DocParserHelper::parse($docProp);
         if (is_array($docParseItems) && array_key_exists('var', $docParseItems)) {
@@ -171,6 +210,7 @@ class Object2DataArrayHelper
             if (class_exists($var)) {
                 $varObj = new $var();
                 if ($varObj instanceof BaseEntity) {
+                    self::$cacheEntityProperty[$key] = $var;
                     return $varObj;
                 }
             }
