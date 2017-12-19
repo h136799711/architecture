@@ -278,6 +278,50 @@ class BaseJsonObjectTest extends TestCase
     private $entity;
 
     /**
+     * test
+     * @var  \byTest\infrastructure\helper\TestEntity
+     */
+    private $entity2;
+    /**
+     * test
+     * @var  \byTest\infrastructure\helper\TestEntity
+     */
+    private $entity3;
+
+    /**
+     * @return TestEntity
+     */
+    public function getEntity2()
+    {
+        return $this->entity2;
+    }
+
+    /**
+     * @param TestEntity $entity2
+     */
+    public function setEntity2($entity2)
+    {
+        $this->entity2 = $entity2;
+    }
+
+    /**
+     * @return TestEntity
+     */
+    public function getEntity3()
+    {
+        return $this->entity3;
+    }
+
+    /**
+     * @param TestEntity $entity3
+     */
+    public function setEntity3($entity3)
+    {
+        $this->entity3 = $entity3;
+    }
+
+
+    /**
      * @covers BaseJsonObject
      * @uses   \by\infrastructure\helper\Object2DataArrayHelper
      * @group  helper
@@ -376,6 +420,7 @@ class BaseJsonObjectTest extends TestCase
         echo "min time" . $minTime, "\n";
         var_dump(Object2DataArrayHelper::$cacheReflectionCls);
         var_dump(Object2DataArrayHelper::$cacheEntityProperty);
+        var_dump(Object2DataArrayHelper::$cacheClassProperty);
     }
 
     /**

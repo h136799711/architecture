@@ -23,6 +23,7 @@ class Object2DataArrayHelper
 {
     public static $cacheReflectionCls = [];
     public static $cacheEntityProperty = [];
+    public static $cacheClassProperty = [];
 
     // member function
     public function __construct()
@@ -32,11 +33,18 @@ class Object2DataArrayHelper
 
     public static function getAllProperties(\ReflectionClass $refCls)
     {
-        $properties = $refCls->getProperties();
-        while (($refCls = $refCls->getParentClass())) {
-            $properties = array_merge($refCls->getProperties(), $properties);
+        $clsName = $refCls->getName();
+        $key = str_replace("\\", '_', $clsName);
+        if (!array_key_exists($key, self::$cacheClassProperty)) {
+            $properties = $refCls->getProperties();
+            while (($refCls = $refCls->getParentClass())) {
+                $properties = array_merge($refCls->getProperties(), $properties);
+            }
+
+            self::$cacheClassProperty[$key] = $properties;
         }
-        return $properties;
+
+        return self::$cacheClassProperty[$key];
     }
 
     /**
@@ -49,14 +57,11 @@ class Object2DataArrayHelper
      */
     public static function getDataArrayFrom($instance, $properties = [], $ignoreNull = true)
     {
-        $ref = new \ReflectionClass($instance);
+        $clsName = get_class($instance);
+        $ref = self::getReflectionCls($clsName);
         $data = [];
         if (empty($properties)) {
-            $parent = $ref;
-            $properties = $parent->getProperties();
-            while (($parent = $parent->getParentClass())) {
-                $properties = array_merge($parent->getProperties(), $properties);
-            }
+            $properties = self::getAllProperties($ref);
         }
         foreach ($properties as $vo) {
             if ($vo instanceof \ReflectionProperty) {
@@ -64,7 +69,6 @@ class Object2DataArrayHelper
             } else {
                 $propName = self::uncamelize($vo);
             }
-
 
             $key = self::convertUnderline($propName);
             $methodName = 'get' . ucfirst($key);
@@ -118,7 +122,8 @@ class Object2DataArrayHelper
      */
     private static function getReflectionCls($clsName)
     {
-        $key = md5($clsName);
+        $key = str_replace("\\", '_', $clsName);
+//        $key = md5($clsName);
         if (!array_key_exists($key, self::$cacheReflectionCls)) {
             self::$cacheReflectionCls[$key] = new \ReflectionClass($clsName);
         }
@@ -197,7 +202,7 @@ class Object2DataArrayHelper
 //            return null;
 //        }
 
-        $key = md5($docProp);
+        $key = hash("sha256", $docProp);
         if (array_key_exists($key, self::$cacheEntityProperty)) {
             $clsName = self::$cacheEntityProperty[$key];
             return new $clsName;
