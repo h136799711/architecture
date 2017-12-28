@@ -26,10 +26,10 @@ class PagingParams extends BaseObject
     private $pageSize;
 
     // construct
-    public function __construct($pageIndex = 0, $pageIndex = 10)
+    public function __construct($pageIndex = 0, $pageSize = 10)
     {
         $this->setPageIndex($pageIndex);
-        $this->setPageSize($pageIndex);
+        $this->setPageSize($pageSize);
     }
 
     /**
