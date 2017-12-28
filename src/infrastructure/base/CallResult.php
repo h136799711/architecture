@@ -22,7 +22,19 @@ use by\infrastructure\helper\Object2DataArrayHelper;
 class CallResult extends BaseCallResult
 {
 
-    // member function
+    /**
+     * 是否操作失败
+     * @return bool
+     */
+    public function isFail()
+    {
+        return $this->getCode() != 0;
+    }
+
+    /**
+     * 是否成功
+     * @return bool
+     */
     public function isSuccess()
     {
         return $this->getCode() == 0;
@@ -34,14 +46,10 @@ class CallResult extends BaseCallResult
         parent::__construct($data, $msg, $code);
     }
 
-    // override function __toString()
+    
     public function __toString()
     {
         return json_encode(Object2DataArrayHelper::getDataArrayFrom($this));
     }
-
-    // member variables
-
-    // getter setter
 
 }
