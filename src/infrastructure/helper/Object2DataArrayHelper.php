@@ -18,6 +18,7 @@ namespace by\infrastructure\helper;
 
 
 use by\infrastructure\base\BaseEntity;
+use by\infrastructure\interfaces\ObjectToArrayInterface;
 
 class Object2DataArrayHelper
 {
@@ -81,7 +82,7 @@ class Object2DataArrayHelper
                         continue;
                     }
 
-                    if ($propValue instanceof BaseEntity) {
+                    if ($propValue instanceof ObjectToArrayInterface) {
                         $data[$propName] = $propValue->toArray();
                     } else {
                         $data[$propName] = $propValue;
