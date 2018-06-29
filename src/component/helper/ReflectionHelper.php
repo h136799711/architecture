@@ -39,6 +39,7 @@ class ReflectionHelper
      * @param string $methodName 方法名
      * @param array $data 传入参数值数据
      * @return \by\infrastructure\base\CallResult
+     * @throws \ReflectionException
      */
     public static function invokeWithArgs($object, $methodName = 'index', $data = [])
     {
