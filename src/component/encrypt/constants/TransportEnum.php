@@ -48,4 +48,9 @@ class TransportEnum
      * rsa 作为传输真实内容数据加解密
      **/
     const RSA_V1 = "rsa_v1";
+
+    /**
+     * 不做任何处理
+     */
+    const Nothing = "nothing";
 }

@@ -11,6 +11,7 @@ namespace by\component\encrypt\factory;
 use by\component\encrypt\constants\TransportEnum;
 use by\component\encrypt\interfaces\TransportInterface;
 use by\component\encrypt\md5v3\Md5V3Transport;
+use by\component\encrypt\nothing\NothingTransport;
 
 /**
  * 传输算法工厂
@@ -30,6 +31,8 @@ class TransportFactory
     {
 
         switch ($enum) {
+            case TransportEnum::Nothing:
+                return new NothingTransport($data);
             case TransportEnum::MD5_V3:
                 return new Md5V3Transport($data);
             default:
