@@ -184,4 +184,16 @@ class StringHelper
         }
         return implode('', $temp_array);
     }
+
+    /**
+     * 针对空字符串返回一个空数组
+     * @param $delimiter
+     * @param $string
+     * @param null $limit
+     * @return array
+     */
+    public static function explode($delimiter, $string, $limit = null) {
+        if (empty($string)) return [];
+        return explode($delimiter, $string, $limit);
+    }
 }
