@@ -14,7 +14,7 @@
  *********************************
  */
 
-namespace by\component\lang\helper;
+namespace by\infrastructure\helper;
 
 
 /**
