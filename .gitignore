@@ -30,3 +30,6 @@ sftp-config.json
 .vscode/
 vendor/
 composer.lock
+
+*.cache
+

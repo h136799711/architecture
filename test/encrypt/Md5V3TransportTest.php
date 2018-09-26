@@ -49,8 +49,18 @@ class Md5V3TransportTest extends TestCase
         $encrypt = $transport->encrypt($entity->toArray());
         var_dump($encrypt);
         $encrypt['client_secret'] = 'test_secret';
-        $decrypt = $transport->decrypt($encrypt);
+        $transData = [
+            "client_id"=> "by_common_client_id",
+            "itboye" => "M0JLN3FVcWl3dkEya3luU0lxYW1pWDR2bWM3eHpOeGVib2NDNFBqR1hpa3ZtR3ZobTR5TmhPaDBlVklLWEsxWTJIbXcxTm11L2NuT2ZjQy82VGZSbFlYWVFRVm1IUVM1NGdkcnVQdWFzdTMvamg3MkFTek5XMk0wNXZFTW1zWTUzenc5MjZNdEhNcGlwamFTSnZURnM1ODZHQUZ6aFNSMjRWUEppRkdzSWtaOHlqVjBhV0xmWlNmLzYreVFFRW9GOExMU1loUXo5QVhSKzFjWmp3R1hQcHc4dHh3emQrbzBTYldYQjVHUHdVM3Yzd0U0TmVnMzBId1lVS2tFVGtnUFJrZTdRUjh6Qi9PUDZOd0ZXT0tVdkdWZE1sdGdobFk2UUJXMk01Y3EzcHFKeCtWRVQ0WHl4NlhMNGlJTDB2bzRjc0FNVDB6bFJaam01VkxJTXFUSXRSZGdGQjJ1REx0b3dRUlBpdlBWcmg4MmtYRG5aMmt2MDJWMys4TUlvUDBGcGttVEtrTDRkK1A2TG81ZlRUYkpBZ1JvSTQ3Z1hyU05JeHFaN3h2UklubDRLN2hpdXEvbldVYTZ5QjhmNWxrQm9VSGM2TUFQZm9Yb3pNNVYwdVVVcStXSk5iTGk2czNvZkpSTUcwbnFFdEsyV2F4Umw0TCtBVXVXZlFzSWNkbHVBNUIrVjBIN3Y5bjY2WlJTUkJFZU9FMUxGanBzcEV5Nw==",
+            "app_type" => "pc",
+            "app_version" =>  "100",
+            "service_type" => "By_SecurityCode_create",
+            "service_version" => "100",
+            "client_secret" => "byTestSecret654321"
+        ];
+        $decrypt = $transport->decrypt($transData);
         var_dump($decrypt);
+
     }
 
 }
